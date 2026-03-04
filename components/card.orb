@@ -1,0 +1,4 @@
+<div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee;">
+  <h3 style="color: #6c5ce7; margin-bottom: 0.5rem;">{{ title }}</h3>
+  <p style="color: #555;">{{ description }}</p>
+</div>

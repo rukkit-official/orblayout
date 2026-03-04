@@ -1,0 +1,4 @@
+<section style="background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 16px; padding: 3rem; text-align: center; margin-bottom: 3rem;">
+  <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">{{ heading }}</h1>
+  <p style="font-size: 1.2rem; opacity: 0.9;">{{ subheading }}</p>
+</section>
