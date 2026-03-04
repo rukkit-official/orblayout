@@ -1,0 +1,9 @@
+{
+  "pagesDir": "pages",
+  "componentsDir": "components",
+  "layoutsDir": "layouts",
+  "outputDir": "dist",
+  "assetsDir": "assets",
+  "minify": false,
+  "pretty": true
+}

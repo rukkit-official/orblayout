@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbLayout — Static Site Builder</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem; }
+    a { color: #6c5ce7; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header style="background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; padding: 1rem 2rem;">
+  <nav style="max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <a href="/" style="color: white; font-weight: bold; font-size: 1.25rem;">◉ OrbLayout</a>
+    <div>
+      <a href="/" style="color: rgba(255,255,255,0.9); margin-left: 1.5rem;">Home</a>
+      <a href="/about.html" style="color: rgba(255,255,255,0.9); margin-left: 1.5rem;">About</a>
+      <a href="/features.html" style="color: rgba(255,255,255,0.9); margin-left: 1.5rem;">Features</a>
+    </div>
+  </nav>
+</header>
+
+
+  <main>
+    <section style="background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 16px; padding: 3rem; text-align: center; margin-bottom: 3rem;">
+  <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">◉ OrbLayout</h1>
+  <p style="font-size: 1.2rem; opacity: 0.9;">Build static sites with the simplicity of HTML and the power of components.</p>
+</section>
+
+
+    <h2 style="margin-bottom: 1.5rem;">Why OrbLayout?</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 3rem;">
+      <div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee;">
+  <h3 style="color: #6c5ce7; margin-bottom: 0.5rem;">Pure HTML</h3>
+  <p style="color: #555;">No virtual DOM, no JavaScript runtime. Your pages are pure, clean HTML.</p>
+</div>
+
+
+      <div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee;">
+  <h3 style="color: #6c5ce7; margin-bottom: 0.5rem;">Component System</h3>
+  <p style="color: #555;">Create reusable components with props, just like modern frameworks.</p>
+</div>
+
+
+      <div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee;">
+  <h3 style="color: #6c5ce7; margin-bottom: 0.5rem;">Layout Engine</h3>
+  <p style="color: #555;">Define layouts once, reuse everywhere with content slots.</p>
+</div>
+
+
+      <div style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee;">
+  <h3 style="color: #6c5ce7; margin-bottom: 0.5rem;">Lightning Fast</h3>
+  <p style="color: #555;">Build hundreds of pages in milliseconds. No bundler overhead.</p>
+</div>
+
+    </div>
+
+    <h2 style="margin-bottom: 1rem;">Features</h2>
+    <ul style="list-style: none; padding: 0;">
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Zero runtime — pure static HTML
+        </li>
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Layout system with named slots
+        </li>
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Reusable components with props
+        </li>
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Loops, conditionals, and variables
+        </li>
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Dev server with live reload
+        </li>
+      
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          Lightning fast builds
+        </li>
+      
+    </ul>
+
+    
+    <div style="margin-top: 2rem;">
+      <div style="display: inline-block; background: #6c5ce7; color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem; font-weight: 500; margin: 0.25rem;">
+  v1.0
+</div>
+
+      <div style="display: inline-block; background: #e17055; color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem; font-weight: 500; margin: 0.25rem;">
+  HTML
+</div>
+
+      <div style="display: inline-block; background: #00b894; color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem; font-weight: 500; margin: 0.25rem;">
+  Static
+</div>
+
+      <div style="display: inline-block; background: #fdcb6e; color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem; font-weight: 500; margin: 0.25rem;">
+  Fast
+</div>
+
+    </div>
+    
+  </main>
+
+  <footer style="background: #1a1a2e; color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; margin-top: 4rem;">
+  <p>&copy; 2026 OrbLayout &mdash; Built with ◉ OrbLayout v1.0</p>
+</footer>
+
+
+</body>
+</html>

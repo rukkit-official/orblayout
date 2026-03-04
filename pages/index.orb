@@ -1,0 +1,61 @@
+<script data>
+({
+  title: "OrbLayout — Static Site Builder",
+  features: [
+    "Zero runtime — pure static HTML",
+    "Layout system with named slots",
+    "Reusable components with props",
+    "Loops, conditionals, and variables",
+    "Dev server with live reload",
+    "Lightning fast builds"
+  ],
+  showBadges: true
+})
+</script>
+
+<layout src="main.layout">
+  <content>
+    <use component="hero"
+      heading="◉ OrbLayout"
+      subheading="Build static sites with the simplicity of HTML and the power of components." />
+
+    <h2 style="margin-bottom: 1.5rem;">Why OrbLayout?</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 3rem;">
+      <use component="card"
+        title="Pure HTML"
+        description="No virtual DOM, no JavaScript runtime. Your pages are pure, clean HTML." />
+
+      <use component="card"
+        title="Component System"
+        description="Create reusable components with props, just like modern frameworks." />
+
+      <use component="card"
+        title="Layout Engine"
+        description="Define layouts once, reuse everywhere with content slots." />
+
+      <use component="card"
+        title="Lightning Fast"
+        description="Build hundreds of pages in milliseconds. No bundler overhead." />
+    </div>
+
+    <h2 style="margin-bottom: 1rem;">Features</h2>
+    <ul style="list-style: none; padding: 0;">
+      {{#each features}}
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+          <span style="color: #6c5ce7; margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+          {{ this }}
+        </li>
+      {{/each}}
+    </ul>
+
+    {{#if showBadges}}
+    <div style="margin-top: 2rem;">
+      <use component="badge" text="v1.0" color="#6c5ce7" />
+      <use component="badge" text="HTML" color="#e17055" />
+      <use component="badge" text="Static" color="#00b894" />
+      <use component="badge" text="Fast" color="#fdcb6e" />
+    </div>
+    {{/if}}
+  </content>
+</layout>
