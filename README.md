@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/orblayout"><img src="https://img.shields.io/badge/npm-orblayout-cc3534" alt="npm" /></a>
+  <img src="https://img.shields.io/badge/website-OrbLayout-FFFF00" alt="Website" />
   <img src="https://img.shields.io/badge/version-1.2.0-6c5ce7" alt="Version" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License" />
   <img src="https://img.shields.io/badge/node-%3E%3D16-brightgreen" alt="Node" />
@@ -17,6 +18,7 @@
 </p>
 
 <p align="center">
+  <a href="https://orblayout.pages.dev"><strong>Website</strong></a> •
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-cli-reference">CLI</a> •
   <a href="#-syntax-reference">Syntax</a> •
