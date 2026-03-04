@@ -1,3 +1,0 @@
-<footer style="background: #1a1a2e; color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; margin-top: 4rem;">
-  <p>&copy; {{ year }} OrbLayout &mdash; Built with ◉ OrbLayout v1.0</p>
-</footer>
