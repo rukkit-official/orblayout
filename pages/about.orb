@@ -1,0 +1,31 @@
+<script data>
+({
+  title: "About — OrbLayout"
+})
+</script>
+
+<layout src="main.layout">
+  <content>
+    <h1 style="margin-bottom: 1rem;">About OrbLayout</h1>
+
+    <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 2rem;">
+      <p style="font-size: 1.1rem; line-height: 1.8; color: #444;">
+        OrbLayout is a lightweight static site builder that brings the component-based
+        philosophy of modern frameworks like React and Vue to <strong>pure HTML</strong>.
+      </p>
+      <br>
+      <p style="color: #555;">
+        No JavaScript runtime. No virtual DOM. No build complexity.
+        Just clean, fast, static HTML — the way the web was meant to be.
+      </p>
+    </div>
+
+    <h2 style="margin-bottom: 1rem;">How It Works</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <use component="card" title="1. Write .orb files" description="Use familiar HTML with layout and component syntax." />
+      <use component="card" title="2. Run orb build" description="The compiler processes layouts, components, and variables." />
+      <use component="card" title="3. Get pure HTML" description="Output is clean static HTML, ready to deploy anywhere." />
+    </div>
+  </content>
+</layout>

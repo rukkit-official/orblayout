@@ -1,0 +1,47 @@
+<script data>
+({
+  title: "Features — OrbLayout",
+  coreFeatures: [
+    { name: "Layouts", desc: "Define page structure once, reuse across all pages" },
+    { name: "Components", desc: "Reusable HTML blocks with prop-based data injection" },
+    { name: "Props", desc: "Pass data to components via HTML attributes" },
+    { name: "Variables", desc: "Use {{ variable }} syntax for dynamic content" },
+    { name: "Loops", desc: "Iterate over arrays with {{#each}} blocks" },
+    { name: "Conditionals", desc: "Show/hide content with {{#if}} and {{#unless}}" },
+    { name: "Named Slots", desc: "Multiple content areas in a single layout" },
+    { name: "Imports", desc: "Import components with custom tag aliases" },
+    { name: "Scoped Styles", desc: "Component-level CSS that stays organized" },
+    { name: "Dev Server", desc: "Live reload development server built in" }
+  ],
+  hasUpgrades: true
+})
+</script>
+
+<layout src="main.layout">
+  <content>
+    <use component="hero"
+      heading="Features"
+      subheading="Everything you need to build beautiful static sites." />
+
+    <h2 style="margin-bottom: 1.5rem;">Core Features</h2>
+
+    {{#each coreFeatures}}
+    <div style="display: flex; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid #eee;">
+      <div style="background: #6c5ce7; color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem; flex-shrink: 0; font-weight: bold;">
+        {{ @index }}
+      </div>
+      <div>
+        <h3 style="margin-bottom: 0.25rem;">{{ name }}</h3>
+        <p style="color: #666;">{{ desc }}</p>
+      </div>
+    </div>
+    {{/each}}
+
+    {{#if hasUpgrades}}
+    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; border-radius: 12px; padding: 2rem; margin-top: 3rem; text-align: center;">
+      <h2>More coming in v2.0</h2>
+      <p style="opacity: 0.7; margin-top: 0.5rem;">Partials, nested layouts, markdown support, and more.</p>
+    </div>
+    {{/if}}
+  </content>
+</layout>
