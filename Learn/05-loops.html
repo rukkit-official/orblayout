@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5: Loops & Iteration — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 05 of 10</div>
+        <h1>Loops & Iteration</h1>
+        <p class="lesson-desc">Render lists of items dynamically with {{#each}} blocks. Learn to iterate over arrays, access loop helpers like @index and @first, and generate repetitive HTML without copy-pasting.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#basic">Basic Loops</a></li>
+          <li><a href="#primitives">Looping Primitives</a></li>
+          <li><a href="#objects">Looping Objects</a></li>
+          <li><a href="#helpers">Loop Helper Variables</a></li>
+          <li><a href="#components-in-loops">Components in Loops</a></li>
+          <li><a href="#real-world">Real-World Examples</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Basic Loops -->
+      <div class="section" id="basic">
+        <h2>Basic Loops</h2>
+        <p>The <code>{{#each}}</code> block iterates over an array defined in your data block.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Syntax</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">arrayName</span><span class="hl-bracket">}}</span>
+  <span class="hl-comment">&lt;!-- This HTML repeats for each item --&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Primitive Arrays -->
+      <div class="section" id="primitives">
+        <h2>Looping Primitive Arrays</h2>
+        <p>For arrays of strings or numbers, use <code>{{ this }}</code> to access the current item.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">String Array Loop</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">fruits</span>: [<span class="hl-string">"Apple"</span>, <span class="hl-string">"Banana"</span>, <span class="hl-string">"Cherry"</span>, <span class="hl-string">"Dragonfruit"</span>]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;ul&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">fruits</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;li&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/li&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/ul&gt;</span></code></pre>
+        </div>
+
+        <p><strong>Output:</strong></p>
+        <div class="result-preview">
+          <ul style="padding-left: 1.5rem;">
+            <li>Apple</li>
+            <li>Banana</li>
+            <li>Cherry</li>
+            <li>Dragonfruit</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Object Arrays -->
+      <div class="section" id="objects">
+        <h2>Looping Object Arrays</h2>
+        <p>For arrays of objects, access each property by name inside the loop:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Object Array Loop</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">team</span>: [
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Alice"</span>, <span class="hl-attr">role</span>: <span class="hl-string">"Designer"</span>, <span class="hl-attr">avatar</span>: <span class="hl-string">"🎨"</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Bob"</span>, <span class="hl-attr">role</span>: <span class="hl-string">"Developer"</span>, <span class="hl-attr">avatar</span>: <span class="hl-string">"💻"</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Carol"</span>, <span class="hl-attr">role</span>: <span class="hl-string">"PM"</span>, <span class="hl-attr">avatar</span>: <span class="hl-string">"📋"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"team-grid"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">team</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"member"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"avatar"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">avatar</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/span&gt;</span>
+      <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+      <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">role</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <p><strong>Output:</strong></p>
+        <div class="result-preview">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;">
+            <div style="text-align: center; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+              <div style="font-size: 2rem;">🎨</div>
+              <h3 style="font-size: 1rem; margin: 0.5rem 0 0.25rem;">Alice</h3>
+              <p style="font-size: 0.85rem; color: #666; margin: 0;">Designer</p>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+              <div style="font-size: 2rem;">💻</div>
+              <h3 style="font-size: 1rem; margin: 0.5rem 0 0.25rem;">Bob</h3>
+              <p style="font-size: 0.85rem; color: #666; margin: 0;">Developer</p>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+              <div style="font-size: 2rem;">📋</div>
+              <h3 style="font-size: 1rem; margin: 0.5rem 0 0.25rem;">Carol</h3>
+              <p style="font-size: 0.85rem; color: #666; margin: 0;">PM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loop Helpers -->
+      <div class="section" id="helpers">
+        <h2>Loop Helper Variables</h2>
+        <p>Inside an <code>{{#each}}</code> block, you get special helper variables:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Variable</th><th>Type</th><th>Description</th><th>Example (3 items)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>{{ this }}</code></td><td>any</td><td>Current item value (for primitive arrays)</td><td><code>"Apple"</code></td></tr>
+              <tr><td><code>{{ @index }}</code></td><td>number</td><td>0-based index</td><td><code>0</code>, <code>1</code>, <code>2</code></td></tr>
+              <tr><td><code>{{ @number }}</code></td><td>number</td><td>1-based index (human-friendly)</td><td><code>1</code>, <code>2</code>, <code>3</code></td></tr>
+              <tr><td><code>{{ @first }}</code></td><td>string</td><td><code>"true"</code> if first item, <code>""</code> otherwise</td><td><code>"true"</code>, <code>""</code>, <code>""</code></td></tr>
+              <tr><td><code>{{ @last }}</code></td><td>string</td><td><code>"true"</code> if last item, <code>""</code> otherwise</td><td><code>""</code>, <code>""</code>, <code>"true"</code></td></tr>
+              <tr><td><code>{{ @count }}</code></td><td>number</td><td>Total number of items</td><td><code>3</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Using Loop Helpers</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">steps</span>: [<span class="hl-string">"Install"</span>, <span class="hl-string">"Configure"</span>, <span class="hl-string">"Build"</span>, <span class="hl-string">"Deploy"</span>]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;ol&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">steps</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;li&gt;</span>
+      Step <span class="hl-bracket">{{</span> <span class="hl-var">@number</span> <span class="hl-bracket">}}</span> of <span class="hl-bracket">{{</span> <span class="hl-var">@count</span> <span class="hl-bracket">}}</span>: <span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span>
+      <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">@last</span><span class="hl-bracket">}}</span> 🎉<span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;/li&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/ol&gt;</span></code></pre>
+        </div>
+
+        <p><strong>Output:</strong></p>
+        <div class="result-preview">
+          <ol style="padding-left: 1.5rem;">
+            <li>Step 1 of 4: Install</li>
+            <li>Step 2 of 4: Configure</li>
+            <li>Step 3 of 4: Build</li>
+            <li>Step 4 of 4: Deploy 🎉</li>
+          </ol>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Pro tip:</strong> Use <code>{{ @first }}</code> and <code>{{ @last }}</code> with <code>{{#if}}</code> to add special styling to the first or last item in a list.</p>
+        </div>
+      </div>
+
+      <!-- Components in Loops -->
+      <div class="section" id="components-in-loops">
+        <h2>Components in Loops</h2>
+        <p>This is where loops become really powerful — generate components dynamically:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Components + Loops</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">features</span>: [
+    { <span class="hl-attr">title</span>: <span class="hl-string">"Fast"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Zero runtime JavaScript"</span> },
+    { <span class="hl-attr">title</span>: <span class="hl-string">"Simple"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Just HTML with superpowers"</span> },
+    { <span class="hl-attr">title</span>: <span class="hl-string">"Flexible"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Build anything you want"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"features-grid"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">features</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+      <span class="hl-attr">title</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span>"</span>
+      <span class="hl-attr">description</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">desc</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <p>Three card components generated from data! Change the array and the page updates automatically.</p>
+      </div>
+
+      <!-- Real World -->
+      <div class="section" id="real-world">
+        <h2>Real-World Examples</h2>
+
+        <h3>Navigation menu</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Dynamic Nav</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">navLinks</span>: [
+    { <span class="hl-attr">label</span>: <span class="hl-string">"Home"</span>, <span class="hl-attr">href</span>: <span class="hl-string">"/"</span> },
+    { <span class="hl-attr">label</span>: <span class="hl-string">"About"</span>, <span class="hl-attr">href</span>: <span class="hl-string">"/about"</span> },
+    { <span class="hl-attr">label</span>: <span class="hl-string">"Blog"</span>, <span class="hl-attr">href</span>: <span class="hl-string">"/blog"</span> },
+    { <span class="hl-attr">label</span>: <span class="hl-string">"Contact"</span>, <span class="hl-attr">href</span>: <span class="hl-string">"/contact"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;nav&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">navLinks</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">href</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">label</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/nav&gt;</span></code></pre>
+        </div>
+
+        <h3>Tag cloud</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Tag Cloud</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({ <span class="hl-attr">tags</span>: [<span class="hl-string">"HTML"</span>, <span class="hl-string">"CSS"</span>, <span class="hl-string">"Static"</span>, <span class="hl-string">"Fast"</span>, <span class="hl-string">"Modern"</span>] })
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"tags"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">tags</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"tag"</span><span class="hl-tag">&gt;</span>#<span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/span&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 5 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Loop over primitive arrays with <code>{{#each}}</code> + <code>{{ this }}</code></li>
+          <li>Loop over object arrays and access properties by name</li>
+          <li>Use all 6 loop helpers: <code>@index</code>, <code>@number</code>, <code>@first</code>, <code>@last</code>, <code>@count</code>, <code>this</code></li>
+          <li>Generate components inside loops with dynamic props</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="04-data-variables.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Data & Variables</span>
+        </a>
+        <a href="06-conditionals.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Conditionals</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9: CLI & Dev Server — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 90%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 09 of 10</div>
+        <h1>CLI &amp; Dev Server</h1>
+        <p class="lesson-desc">Master every command, flag, and workflow tool OrbLayout provides — from scaffolding to live-reload development to production builds.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#overview">CLI Overview</a></li>
+          <li><a href="#init">orb init</a></li>
+          <li><a href="#build">orb build</a></li>
+          <li><a href="#dev">orb dev</a></li>
+          <li><a href="#clean">orb clean</a></li>
+          <li><a href="#config">Configuration (orb.config.json)</a></li>
+          <li><a href="#scripts">npm Scripts</a></li>
+          <li><a href="#api">Programmatic API</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- CLI Overview -->
+      <div class="section" id="overview">
+        <h2>CLI Overview</h2>
+        <p>OrbLayout ships with a single CLI binary: <code>orb</code>. Every command starts with it.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">All Commands</span>
+            <span class="code-lang">terminal</span>
+          </div>
+          <pre><code>orb init           <span class="hl-comment"># Scaffold a new project</span>
+orb build          <span class="hl-comment"># Compile .orb → HTML</span>
+orb build --minify <span class="hl-comment"># Compile + minify HTML/CSS/JS</span>
+orb dev            <span class="hl-comment"># Dev server with live reload</span>
+orb dev --port 8080<span class="hl-comment"># Custom port</span>
+orb clean          <span class="hl-comment"># Remove dist/ folder</span>
+orb help           <span class="hl-comment"># Show help</span>
+orb version        <span class="hl-comment"># Show version (v1.2.0)</span></code></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Command</th><th>What It Does</th><th>Flags</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>init</code></td><td>Creates project folders + starter files</td><td>—</td></tr>
+              <tr><td><code>build</code></td><td>Compiles all pages to <code>dist/</code></td><td><code>--minify</code></td></tr>
+              <tr><td><code>dev</code></td><td>Starts dev server + watches files</td><td><code>--port &lt;num&gt;</code></td></tr>
+              <tr><td><code>clean</code></td><td>Empties the <code>dist/</code> directory</td><td>—</td></tr>
+              <tr><td><code>help</code></td><td>Displays all commands &amp; options</td><td>—</td></tr>
+              <tr><td><code>version</code></td><td>Prints the installed version</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- orb init -->
+      <div class="section" id="init">
+        <h2>orb init — Scaffold a Project</h2>
+        <p>Run <code>orb init</code> in an empty directory to generate the full project structure.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">mkdir</span> my-site && <span class="hl-keyword">cd</span> my-site
+<span class="hl-keyword">npx</span> orblayout init</code></pre>
+        </div>
+
+        <h3>What gets created</h3>
+        <div class="result-preview">
+          <div class="result-label">Output</div>
+<pre><code>  ╔═══════════════════════════════════════╗
+  ║     ◉  O r b L a y o u t  v1.2.0    ║
+  ║     Static Site Builder               ║
+  ╚═══════════════════════════════════════╝
+
+  Scaffolding new OrbLayout project...
+
+  ✓ Created pages/
+  ✓ Created components/
+  ✓ Created layouts/
+  ✓ Created assets/
+  ✓ Created orb.config.json
+  ✓ Created layouts/main.layout
+  ✓ Created components/header.orb
+  ✓ Created components/footer.orb
+  ✓ Created pages/index.orb
+
+  ──────────────────────────────────
+  Project scaffolded! Run:
+
+    orb build    — Build static HTML
+    orb dev      — Start dev server</code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Safe to run again.</strong> <code>orb init</code> only creates files that don't already exist — it will never overwrite your work.</p>
+        </div>
+      </div>
+
+      <!-- orb build -->
+      <div class="section" id="build">
+        <h2>orb build — Compile Your Site</h2>
+        <p>Compiles every <code>.orb</code> file in <code>pages/</code> into static HTML in <code>dist/</code>.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">orb</span> build</code></pre>
+        </div>
+
+        <div class="result-preview">
+          <div class="result-label">Output</div>
+<pre><code>  Building pages...
+
+  ✓ index.orb → index.html
+  ✓ about.orb → about.html
+  ✓ blog/post-1.orb → blog/post-1.html
+  ✓ Assets copied
+
+  ──────────────────────────────────
+  Done! 3 page(s) compiled in 24ms
+  Output: dist/</code></pre>
+        </div>
+
+        <h3>The build pipeline</h3>
+        <div class="info-box note">
+          <span class="icon">📋</span>
+          <div>
+            <p>Here's exactly what happens during a build:</p>
+            <ol style="margin: 0.5rem 0 0 1.2rem; color: var(--text-dim);">
+              <li>Empty <code>dist/</code> folder (clean start)</li>
+              <li>Discover all <code>.orb</code> files in <code>pages/</code></li>
+              <li>For each page: parse data → resolve imports → process components → process loops → process conditionals → process with blocks → apply filters → resolve variables → inject layout → collect styles</li>
+              <li>Minify HTML (if <code>--minify</code> flag)</li>
+              <li>Write output to <code>dist/</code></li>
+              <li>Copy <code>assets/</code> → <code>dist/assets/</code></li>
+            </ol>
+          </div>
+        </div>
+
+        <h3>--minify flag</h3>
+        <p>Produces smaller HTML for production:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Minified build</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">orb</span> build --minify
+
+<span class="hl-comment"># What minification does:</span>
+<span class="hl-comment"># - Removes whitespace</span>
+<span class="hl-comment"># - Removes HTML comments</span>
+<span class="hl-comment"># - Removes redundant attributes</span>
+<span class="hl-comment"># - Minifies inline CSS & JS</span></code></pre>
+        </div>
+
+        <h3>Subdirectories</h3>
+        <p>Nested folders in <code>pages/</code> create matching directories in output:</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Source</span>
+              <span class="code-lang">pages/</span>
+            </div>
+            <pre><code>pages/
+├── index.orb
+├── about.orb
+└── blog/
+    ├── post-1.orb
+    └── post-2.orb</code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Output</span>
+              <span class="code-lang">dist/</span>
+            </div>
+            <pre><code>dist/
+├── index.html
+├── about.html
+└── blog/
+    ├── post-1.html
+    └── post-2.html</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- orb dev -->
+      <div class="section" id="dev">
+        <h2>orb dev — Development Server</h2>
+        <p>Start a local server that watches your files and auto-refreshes the browser when you save.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">orb</span> dev
+
+<span class="hl-comment"># Or with custom port:</span>
+<span class="hl-keyword">orb</span> dev --port 8080</code></pre>
+        </div>
+
+        <div class="result-preview">
+          <div class="result-label">Output</div>
+<pre><code>  Building...
+
+  ✓ index.orb → index.html
+  ✓ Assets copied
+
+  🌐 OrbLayout dev server running at http://localhost:3000
+  Watching for changes...</code></pre>
+        </div>
+
+        <h3>How live reload works</h3>
+        <div class="info-box tip">
+          <span class="icon">⚡</span>
+          <div>
+            <p><strong>OrbLayout uses SSE (Server-Sent Events)</strong> — no WebSocket dependency needed.</p>
+            <ol style="margin: 0.5rem 0 0 1.2rem; color: var(--text-dim);">
+              <li><strong>Watch:</strong> Chokidar monitors <code>pages/</code>, <code>components/</code>, <code>layouts/</code>, and <code>assets/</code></li>
+              <li><strong>Rebuild:</strong> On file change, the entire site is rebuilt (~20ms)</li>
+              <li><strong>Notify:</strong> SSE sends <code>"reload"</code> to all connected browsers</li>
+              <li><strong>Refresh:</strong> JavaScript in the page calls <code>window.location.reload()</code></li>
+            </ol>
+          </div>
+        </div>
+
+        <h3>What gets served</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Feature</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Static files</td><td>Served from <code>dist/</code></td></tr>
+              <tr><td>Clean URLs</td><td><code>/about</code> → <code>about.html</code></td></tr>
+              <tr><td>Directory indexes</td><td><code>/blog/</code> → <code>blog/index.html</code></td></tr>
+              <tr><td>MIME types</td><td>HTML, CSS, JS, JSON, PNG, JPG, SVG, fonts</td></tr>
+              <tr><td>SSE endpoint</td><td><code>/__orb_reload</code></td></tr>
+              <tr><td>404 page</td><td>Built-in styled dark-theme 404</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Press <strong>Ctrl+C</strong> to stop the server gracefully.</p>
+      </div>
+
+      <!-- orb clean -->
+      <div class="section" id="clean">
+        <h2>orb clean — Clear Output</h2>
+        <p>Removes everything inside <code>dist/</code>. Useful before a fresh production build.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">orb</span> clean
+
+<span class="hl-comment"># Then rebuild from scratch:</span>
+<span class="hl-keyword">orb</span> build --minify</code></pre>
+        </div>
+      </div>
+
+      <!-- Configuration -->
+      <div class="section" id="config">
+        <h2>Configuration — orb.config.json</h2>
+        <p>Every OrbLayout project reads its settings from <code>orb.config.json</code> in the project root.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">orb.config.json</span>
+            <span class="code-lang">json</span>
+          </div>
+          <pre><code>{
+  <span class="hl-attr">"pagesDir"</span>:      <span class="hl-string">"pages"</span>,
+  <span class="hl-attr">"componentsDir"</span>: <span class="hl-string">"components"</span>,
+  <span class="hl-attr">"layoutsDir"</span>:    <span class="hl-string">"layouts"</span>,
+  <span class="hl-attr">"outputDir"</span>:     <span class="hl-string">"dist"</span>,
+  <span class="hl-attr">"assetsDir"</span>:     <span class="hl-string">"assets"</span>,
+  <span class="hl-attr">"minify"</span>:        <span class="hl-keyword">false</span>,
+  <span class="hl-attr">"pretty"</span>:        <span class="hl-keyword">true</span>
+}</code></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Key</th><th>Default</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>pagesDir</code></td><td><code>"pages"</code></td><td>Directory containing your <code>.orb</code> source files</td></tr>
+              <tr><td><code>componentsDir</code></td><td><code>"components"</code></td><td>Directory for reusable component files</td></tr>
+              <tr><td><code>layoutsDir</code></td><td><code>"layouts"</code></td><td>Directory for <code>.layout</code> templates</td></tr>
+              <tr><td><code>outputDir</code></td><td><code>"dist"</code></td><td>Where compiled HTML is written</td></tr>
+              <tr><td><code>assetsDir</code></td><td><code>"assets"</code></td><td>Static files copied to output as-is</td></tr>
+              <tr><td><code>minify</code></td><td><code>false</code></td><td>Enable HTML minification (also via <code>--minify</code> flag)</td></tr>
+              <tr><td><code>pretty</code></td><td><code>true</code></td><td>Pretty-print output HTML</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Custom directory names</h3>
+        <p>You can rename any directory:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Custom config</span>
+            <span class="code-lang">json</span>
+          </div>
+          <pre><code>{
+  <span class="hl-attr">"pagesDir"</span>:      <span class="hl-string">"src/views"</span>,
+  <span class="hl-attr">"componentsDir"</span>: <span class="hl-string">"src/ui"</span>,
+  <span class="hl-attr">"layoutsDir"</span>:    <span class="hl-string">"src/templates"</span>,
+  <span class="hl-attr">"outputDir"</span>:     <span class="hl-string">"build"</span>,
+  <span class="hl-attr">"assetsDir"</span>:     <span class="hl-string">"public"</span>,
+  <span class="hl-attr">"minify"</span>:        <span class="hl-keyword">true</span>
+}</code></pre>
+        </div>
+
+        <div class="info-box note">
+          <span class="icon">📋</span>
+          <p>If <code>orb.config.json</code> doesn't exist, OrbLayout uses the defaults. You only need to include keys you want to change.</p>
+        </div>
+      </div>
+
+      <!-- npm Scripts -->
+      <div class="section" id="scripts">
+        <h2>npm Scripts</h2>
+        <p>Add OrbLayout commands to your <code>package.json</code> for convenience:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">package.json</span>
+            <span class="code-lang">json</span>
+          </div>
+          <pre><code>{
+  <span class="hl-attr">"name"</span>: <span class="hl-string">"my-site"</span>,
+  <span class="hl-attr">"scripts"</span>: {
+    <span class="hl-attr">"dev"</span>:   <span class="hl-string">"orb dev"</span>,
+    <span class="hl-attr">"build"</span>: <span class="hl-string">"orb build"</span>,
+    <span class="hl-attr">"prod"</span>:  <span class="hl-string">"orb clean && orb build --minify"</span>,
+    <span class="hl-attr">"clean"</span>: <span class="hl-string">"orb clean"</span>
+  }
+}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Usage</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">npm</span> run dev    <span class="hl-comment"># Start dev server</span>
+<span class="hl-keyword">npm</span> run build  <span class="hl-comment"># Build site</span>
+<span class="hl-keyword">npm</span> run prod   <span class="hl-comment"># Clean + minified production build</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Programmatic API -->
+      <div class="section" id="api">
+        <h2>Programmatic API</h2>
+        <p>Use OrbLayout from your own Node.js scripts — perfect for custom build pipelines, CI/CD, and automation.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">build-script.js</span>
+            <span class="code-lang">javascript</span>
+          </div>
+          <pre><code><span class="hl-keyword">const</span> { loadConfig, OrbCompiler, OrbBuilder, OrbDevServer } = <span class="hl-keyword">require</span>(<span class="hl-string">"orblayout"</span>);
+
+<span class="hl-comment">// Load config from current directory</span>
+<span class="hl-keyword">const</span> config = loadConfig(__dirname);
+
+<span class="hl-comment">// ── Option 1: Full build ──</span>
+<span class="hl-keyword">const</span> builder = <span class="hl-keyword">new</span> OrbBuilder(config);
+<span class="hl-keyword">const</span> result = <span class="hl-keyword">await</span> builder.build();
+console.log(`Built ${result.pages} pages in ${result.time}ms`);
+
+<span class="hl-comment">// ── Option 2: Compile a single page ──</span>
+<span class="hl-keyword">const</span> compiler = <span class="hl-keyword">new</span> OrbCompiler(config);
+<span class="hl-keyword">const</span> html = compiler.compilePage(<span class="hl-string">"pages/index.orb"</span>);
+
+<span class="hl-comment">// ── Option 3: Start dev server ──</span>
+<span class="hl-keyword">const</span> server = <span class="hl-keyword">new</span> OrbDevServer(config);
+<span class="hl-keyword">await</span> server.start(<span class="hl-var">3000</span>);</code></pre>
+        </div>
+
+        <h3>Custom filters via API</h3>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Register a custom filter</span>
+            <span class="code-lang">javascript</span>
+          </div>
+          <pre><code><span class="hl-keyword">const</span> { loadConfig, OrbCompiler } = <span class="hl-keyword">require</span>(<span class="hl-string">"orblayout"</span>);
+
+<span class="hl-keyword">const</span> config = loadConfig(__dirname);
+<span class="hl-keyword">const</span> compiler = <span class="hl-keyword">new</span> OrbCompiler(config);
+
+<span class="hl-comment">// Register your own filter</span>
+compiler.registerFilter(<span class="hl-string">"shout"</span>, (value) => {
+  <span class="hl-keyword">return</span> value.toUpperCase() + <span class="hl-string">"!!!"</span>;
+});
+
+compiler.registerFilter(<span class="hl-string">"dollars"</span>, (value) => {
+  <span class="hl-keyword">return</span> <span class="hl-string">"$"</span> + Number(value).toFixed(2);
+});
+
+<span class="hl-comment">// Now {{ greeting | shout }} → "HELLO!!!"</span>
+<span class="hl-comment">// And {{ price | dollars }} → "$9.99"</span></code></pre>
+        </div>
+
+        <h3>Exported modules</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Export</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>loadConfig(rootDir)</code></td><td>Function</td><td>Reads <code>orb.config.json</code> and returns resolved config object</td></tr>
+              <tr><td><code>OrbCompiler</code></td><td>Class</td><td>Core compiler — <code>.compilePage(path)</code>, <code>.registerFilter(name, fn)</code></td></tr>
+              <tr><td><code>OrbBuilder</code></td><td>Class</td><td>Build orchestrator — <code>.build()</code> discovers &amp; compiles all pages</td></tr>
+              <tr><td><code>OrbDevServer</code></td><td>Class</td><td>Dev server — <code>.start(port)</code>, <code>.stop()</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 9 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Use every CLI command: <code>init</code>, <code>build</code>, <code>dev</code>, <code>clean</code>, <code>help</code>, <code>version</code></li>
+          <li>Build minified production HTML with <code>--minify</code></li>
+          <li>Run a live-reloading dev server with custom ports</li>
+          <li>Configure <code>orb.config.json</code> with custom directories</li>
+          <li>Set up npm scripts for a professional workflow</li>
+          <li>Use the programmatic API to build custom tooling</li>
+          <li>Register custom filters via <code>compiler.registerFilter()</code></li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="08-advanced.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Advanced Features</span>
+        </a>
+        <a href="10-real-project.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Build a Real Project</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

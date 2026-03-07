@@ -1,0 +1,591 @@
+/* ═══════════════════════════════════════════════════════
+   OrbLayout Learning Center — Master Stylesheet
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Reset & Base ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a1a;
+  --bg-card: #12122a;
+  --bg-code: #0d0d20;
+  --bg-surface: #16163a;
+  --bg-hover: #1c1c4a;
+  --text: #e0e0ff;
+  --text-dim: #8888bb;
+  --text-muted: #5555aa;
+  --accent: #6c5ce7;
+  --accent-light: #a29bfe;
+  --accent-glow: rgba(108, 92, 231, 0.3);
+  --green: #00e676;
+  --green-dim: #00c853;
+  --orange: #ff9100;
+  --pink: #ff6b9d;
+  --cyan: #00e5ff;
+  --red: #ff5252;
+  --yellow: #ffd740;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --shadow: 0 4px 32px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 40px rgba(108, 92, 231, 0.15);
+  --max-width: 880px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-light); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--accent); }
+
+img { max-width: 100%; display: block; }
+
+::selection { background: var(--accent); color: #fff; }
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg-surface); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Top Navigation Bar ────────────────────────────── */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(108, 92, 231, 0.15);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.top-nav .logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.top-nav .logo .orb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #a29bfe);
+  font-size: 0.85rem;
+  color: #fff;
+}
+.top-nav .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+}
+.top-nav .nav-links a {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color var(--transition);
+}
+.top-nav .nav-links a:hover,
+.top-nav .nav-links a.active { color: var(--accent-light); }
+
+/* ── Page Container ────────────────────────────────── */
+.page { padding-top: 80px; min-height: 100vh; }
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+
+/* ── Hero (Index Page) ─────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 4rem 0 3rem;
+}
+.hero .badge {
+  display: inline-block;
+  background: var(--accent-glow);
+  border: 1px solid rgba(108, 92, 231, 0.4);
+  color: var(--accent-light);
+  padding: 0.35rem 1rem;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .subtitle {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+/* ── Lesson Cards Grid ─────────────────────────────── */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.lesson-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(108, 92, 231, 0.1);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.lesson-card:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+.lesson-card .lesson-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.lesson-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.lesson-card p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.lesson-card .tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tag.beginner { background: rgba(0, 230, 118, 0.15); color: var(--green); }
+.tag.intermediate { background: rgba(255, 145, 0, 0.15); color: var(--orange); }
+.tag.advanced { background: rgba(255, 82, 82, 0.15); color: var(--red); }
+
+/* ── Lesson Page Layout ────────────────────────────── */
+.lesson-header {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid rgba(108, 92, 231, 0.1);
+  margin-bottom: 2.5rem;
+}
+.lesson-header .lesson-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.lesson-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+.lesson-header .lesson-desc {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* ── Table of Contents ─────────────────────────────── */
+.toc {
+  background: var(--bg-card);
+  border: 1px solid rgba(108, 92, 231, 0.12);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.toc h4 {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+  padding: 0;
+}
+.toc ol li {
+  counter-increment: toc;
+  margin-bottom: 0.35rem;
+}
+.toc ol li a {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color var(--transition);
+}
+.toc ol li a::before {
+  content: counter(toc) ".";
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.8rem;
+  min-width: 1.5rem;
+}
+.toc ol li a:hover { color: var(--accent-light); }
+
+/* ── Sections ──────────────────────────────────────── */
+.section {
+  margin-bottom: 3rem;
+}
+.section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(108, 92, 231, 0.2);
+}
+.section h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 1.5rem 0 0.75rem;
+}
+.section p {
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+.section ul, .section ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.section li {
+  color: var(--text-dim);
+  margin-bottom: 0.4rem;
+  line-height: 1.7;
+}
+.section li strong {
+  color: var(--text);
+}
+
+/* ── Code Blocks ───────────────────────────────────── */
+.code-block {
+  position: relative;
+  background: var(--bg-code);
+  border: 1px solid rgba(108, 92, 231, 0.12);
+  border-radius: var(--radius);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+.code-block .code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: rgba(108, 92, 231, 0.06);
+  border-bottom: 1px solid rgba(108, 92, 231, 0.08);
+}
+.code-block .code-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.code-block .code-lang {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.code-block pre {
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text);
+  tab-size: 2;
+}
+.code-block code {
+  font-family: var(--font-mono);
+}
+
+/* Inline code */
+.section code, p code, li code, td code {
+  background: rgba(108, 92, 231, 0.12);
+  color: var(--accent-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+/* ── Info / Tip / Warning Boxes ────────────────────── */
+.info-box {
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+.info-box .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.info-box p { margin: 0; }
+
+.info-box.tip {
+  background: rgba(0, 230, 118, 0.06);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+  color: var(--green);
+}
+.info-box.warn {
+  background: rgba(255, 145, 0, 0.06);
+  border: 1px solid rgba(255, 145, 0, 0.2);
+  color: var(--orange);
+}
+.info-box.note {
+  background: rgba(108, 92, 231, 0.06);
+  border: 1px solid rgba(108, 92, 231, 0.2);
+  color: var(--accent-light);
+}
+.info-box.danger {
+  background: rgba(255, 82, 82, 0.06);
+  border: 1px solid rgba(255, 82, 82, 0.2);
+  color: var(--red);
+}
+
+/* ── Result Preview ────────────────────────────────── */
+.result-preview {
+  background: #fff;
+  color: #333;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.25rem 0;
+  border: 1px solid rgba(108, 92, 231, 0.15);
+  position: relative;
+}
+.result-preview::before {
+  content: "OUTPUT";
+  position: absolute;
+  top: -0.6rem; left: 1rem;
+  background: var(--bg);
+  padding: 0 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--green);
+}
+.result-preview h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.result-preview h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+.result-preview h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.result-preview p { margin-bottom: 0.5rem; }
+.result-preview .card-demo {
+  background: #f5f5f5; padding: 1rem;
+  border-radius: 8px; margin: 0.5rem 0;
+}
+
+/* ── Side-by-Side Code Comparison ──────────────────── */
+.code-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.code-compare .code-block { margin: 0; }
+@media (max-width: 700px) {
+  .code-compare { grid-template-columns: 1fr; }
+}
+
+/* ── Tables ────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: rgba(108, 92, 231, 0.08);
+  color: var(--accent-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(108, 92, 231, 0.15);
+}
+td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid rgba(108, 92, 231, 0.06);
+  color: var(--text-dim);
+}
+tr:hover td { background: rgba(108, 92, 231, 0.03); }
+
+/* ── Checkpoint / Exercise Boxes ───────────────────── */
+.checkpoint {
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.08), rgba(162, 155, 254, 0.04));
+  border: 1px solid rgba(108, 92, 231, 0.2);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+.checkpoint h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-light);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.checkpoint ol, .checkpoint ul {
+  padding-left: 1.25rem;
+}
+.checkpoint li {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+/* ── Lesson Navigation (Bottom) ────────────────────── */
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(108, 92, 231, 0.1);
+}
+.lesson-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(108, 92, 231, 0.12);
+  border-radius: var(--radius);
+  transition: all var(--transition);
+  min-width: 200px;
+}
+.lesson-nav a:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+  box-shadow: var(--shadow-glow);
+}
+.lesson-nav a .nav-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.lesson-nav a .nav-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+}
+.lesson-nav .next { text-align: right; margin-left: auto; }
+
+/* ── Progress Bar ──────────────────────────────────── */
+.progress-bar {
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  height: 3px;
+  z-index: 999;
+  background: rgba(108, 92, 231, 0.1);
+}
+.progress-bar .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 0 2px 2px 0;
+  transition: width 0.4s ease;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.page-footer {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(108, 92, 231, 0.06);
+  margin-top: 2rem;
+}
+.page-footer a { color: var(--accent); }
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .lessons-grid { grid-template-columns: 1fr; }
+  .lesson-header h1 { font-size: 1.6rem; }
+  .container { padding: 0 1rem 3rem; }
+  .top-nav { padding: 0 1rem; }
+  .lesson-nav { flex-direction: column; }
+  .lesson-nav .next { text-align: left; }
+}
+
+/* ── Syntax Highlight Colors (Manual) ──────────────── */
+.hl-tag { color: var(--pink); }
+.hl-attr { color: var(--orange); }
+.hl-string { color: var(--green); }
+.hl-bracket { color: var(--yellow); }
+.hl-var { color: var(--cyan); }
+.hl-comment { color: var(--text-muted); font-style: italic; }
+.hl-keyword { color: var(--accent-light); }
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeInUp 0.5s ease both; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }

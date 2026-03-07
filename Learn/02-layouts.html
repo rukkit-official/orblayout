@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2: Layouts & Page Structure — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 20%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 02 of 10</div>
+        <h1>Layouts & Page Structure</h1>
+        <p class="lesson-desc">Layouts are the foundation of every OrbLayout site. Define your HTML boilerplate once, then reuse it across every page — automatically.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#problem">The Problem Layouts Solve</a></li>
+          <li><a href="#creating">Creating a Layout</a></li>
+          <li><a href="#using">Using a Layout in Pages</a></li>
+          <li><a href="#variables">Layout Variables</a></li>
+          <li><a href="#named-slots">Named Slots</a></li>
+          <li><a href="#multiple">Multiple Layouts</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- The Problem -->
+      <div class="section" id="problem">
+        <h2>The Problem Layouts Solve</h2>
+        <p>Without layouts, every HTML page repeats the same boilerplate:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Without OrbLayout</span>
+            <span class="code-lang">html</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- You copy-paste this into EVERY page --&gt;</span>
+<span class="hl-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="hl-tag">&lt;html</span> <span class="hl-attr">lang</span>=<span class="hl-string">"en"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;head&gt;</span>
+  <span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span>=<span class="hl-string">"UTF-8"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;title&gt;</span>My Site<span class="hl-tag">&lt;/title&gt;</span>
+  <span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-string">"stylesheet"</span> <span class="hl-attr">href</span>=<span class="hl-string">"style.css"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span>
+<span class="hl-tag">&lt;body&gt;</span>
+  <span class="hl-tag">&lt;header&gt;</span>...<span class="hl-tag">&lt;/header&gt;</span>  <span class="hl-comment">&lt;!-- Same on every page --&gt;</span>
+  <span class="hl-tag">&lt;nav&gt;</span>...<span class="hl-tag">&lt;/nav&gt;</span>        <span class="hl-comment">&lt;!-- Same on every page --&gt;</span>
+
+  <span class="hl-comment">&lt;!-- Only THIS part changes --&gt;</span>
+  <span class="hl-tag">&lt;main&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span>Hello World<span class="hl-tag">&lt;/h1&gt;</span>
+  <span class="hl-tag">&lt;/main&gt;</span>
+
+  <span class="hl-tag">&lt;footer&gt;</span>...<span class="hl-tag">&lt;/footer&gt;</span>  <span class="hl-comment">&lt;!-- Same on every page --&gt;</span>
+<span class="hl-tag">&lt;/body&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></code></pre>
+        </div>
+
+        <p>With 10 pages, that's 10 copies of the same header, nav, footer, and meta tags. Change the nav? Edit 10 files. 😩</p>
+        <p><strong>Layouts solve this.</strong> Write the shell once. Each page only provides its unique content.</p>
+      </div>
+
+      <!-- Creating a Layout -->
+      <div class="section" id="creating">
+        <h2>Creating a Layout</h2>
+        <p>A layout file lives in the <code>layouts/</code> folder and uses the <code>.layout</code> extension. It's just HTML with a special placeholder: <code>{{ content }}</code>.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">layouts/main.layout</span>
+            <span class="code-lang">.layout</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="hl-tag">&lt;html</span> <span class="hl-attr">lang</span>=<span class="hl-string">"en"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;head&gt;</span>
+  <span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span>=<span class="hl-string">"UTF-8"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;meta</span> <span class="hl-attr">name</span>=<span class="hl-string">"viewport"</span> <span class="hl-attr">content</span>=<span class="hl-string">"width=device-width, initial-scale=1.0"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;title&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/title&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span>
+<span class="hl-tag">&lt;body&gt;</span>
+  <span class="hl-tag">&lt;header&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span>My Website<span class="hl-tag">&lt;/h1&gt;</span>
+    <span class="hl-tag">&lt;nav&gt;</span>
+      <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/"</span><span class="hl-tag">&gt;</span>Home<span class="hl-tag">&lt;/a&gt;</span>
+      <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/about"</span><span class="hl-tag">&gt;</span>About<span class="hl-tag">&lt;/a&gt;</span>
+    <span class="hl-tag">&lt;/nav&gt;</span>
+  <span class="hl-tag">&lt;/header&gt;</span>
+
+  <span class="hl-tag">&lt;main&gt;</span>
+    <span class="hl-bracket">{{</span> <span class="hl-var">content</span> <span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/main&gt;</span>
+
+  <span class="hl-tag">&lt;footer&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>&copy; 2026 My Website<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/footer&gt;</span>
+<span class="hl-tag">&lt;/body&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box note">
+          <span class="icon">📐</span>
+          <p><code>{{ content }}</code> is the magic placeholder. Whatever a page puts inside its <code>&lt;content&gt;</code> block will replace this marker.</p>
+        </div>
+      </div>
+
+      <!-- Using a Layout -->
+      <div class="section" id="using">
+        <h2>Using a Layout in Pages</h2>
+        <p>In your <code>.orb</code> page, reference the layout with <code>&lt;layout src="..."&gt;</code> and put your page content inside <code>&lt;content&gt;</code>:</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">pages/index.orb</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>Welcome Home!<span class="hl-tag">&lt;/h2&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>This is the home page.<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">pages/about.orb</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>About Us<span class="hl-tag">&lt;/h2&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>We build cool stuff.<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <p>Both pages share the same layout. The only difference is what's inside <code>&lt;content&gt;</code>.</p>
+
+        <div class="result-preview">
+          <h1 style="font-size: 1.2rem; color: #333;">My Website</h1>
+          <nav style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #ddd;">
+            <a href="#" style="color: #6c5ce7; margin-right: 1rem;">Home</a>
+            <a href="#" style="color: #6c5ce7;">About</a>
+          </nav>
+          <h2 style="font-size: 1.1rem; color: #333;">Welcome Home!</h2>
+          <p style="color: #666;">This is the home page.</p>
+          <p style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #ddd; font-size: 0.8rem; color: #999;">&copy; 2026 My Website</p>
+        </div>
+      </div>
+
+      <!-- Layout Variables -->
+      <div class="section" id="variables">
+        <h2>Layout Variables</h2>
+        <p>Notice the <code>{{ title }}</code> in the layout? You can populate it using a <strong>data block</strong> in your page:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/index.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Home — My Website"</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>Welcome Home!<span class="hl-tag">&lt;/h2&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <p>The <code>title</code> from the data block flows into the layout's <code>&lt;title&gt;{{ title }}&lt;/title&gt;</code>. This is how each page gets a unique browser tab title.</p>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p>Data blocks are covered in depth in <a href="04-data-variables.html">Lesson 4</a>. For now, just know they pass data to the layout.</p>
+        </div>
+      </div>
+
+      <!-- Named Slots -->
+      <div class="section" id="named-slots">
+        <h2>Named Slots</h2>
+        <p>Sometimes a layout needs <strong>multiple content areas</strong>, not just one. Named slots make this possible.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">layouts/docs.layout</span>
+            <span class="code-lang">.layout</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="hl-tag">&lt;html&gt;</span>
+<span class="hl-tag">&lt;body&gt;</span>
+  <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"layout"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;aside</span> <span class="hl-attr">class</span>=<span class="hl-string">"sidebar"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-bracket">{{</span> <span class="hl-var">sidebar</span> <span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;/aside&gt;</span>
+    <span class="hl-tag">&lt;main</span> <span class="hl-attr">class</span>=<span class="hl-string">"content"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-bracket">{{</span> <span class="hl-var">content</span> <span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;/main&gt;</span>
+  <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/body&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/docs.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"docs.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span>Documentation<span class="hl-tag">&lt;/h1&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Welcome to the docs.<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+
+  <span class="hl-tag">&lt;slot:sidebar&gt;</span>
+    <span class="hl-tag">&lt;nav&gt;</span>
+      <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"#intro"</span><span class="hl-tag">&gt;</span>Introduction<span class="hl-tag">&lt;/a&gt;</span>
+      <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"#api"</span><span class="hl-tag">&gt;</span>API Reference<span class="hl-tag">&lt;/a&gt;</span>
+      <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"#faq"</span><span class="hl-tag">&gt;</span>FAQ<span class="hl-tag">&lt;/a&gt;</span>
+    <span class="hl-tag">&lt;/nav&gt;</span>
+  <span class="hl-tag">&lt;/slot:sidebar&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <p><code>&lt;slot:sidebar&gt;</code> fills the <code>{{ sidebar }}</code> placeholder. <code>&lt;content&gt;</code> fills <code>{{ content }}</code>. You can create as many named slots as you need.</p>
+
+        <div class="info-box note">
+          <span class="icon">📝</span>
+          <p><strong>Rules:</strong> The slot name after <code>&lt;slot:</code> must match the <code>{{ variableName }}</code> in the layout. The closing tag must match too: <code>&lt;/slot:sidebar&gt;</code>.</p>
+        </div>
+      </div>
+
+      <!-- Multiple Layouts -->
+      <div class="section" id="multiple">
+        <h2>Multiple Layouts</h2>
+        <p>You're not limited to one layout! Create different layouts for different page types:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">File Structure</span>
+            <span class="code-lang">structure</span>
+          </div>
+          <pre><code>layouts/
+├── main.layout        ← Standard pages (home, about)
+├── docs.layout        ← Documentation (sidebar + content)
+├── blog.layout        ← Blog posts (author, date, content)
+└── landing.layout     ← Landing pages (full-width, no nav)</code></pre>
+        </div>
+
+        <p>Each page chooses its layout via <code>src="..."</code>:</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">pages/index.orb</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  ...
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">pages/blog/post.orb</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"blog.layout"</span><span class="hl-tag">&gt;</span>
+  ...
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 2 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now understand:</p>
+        <ol>
+          <li>Layouts define the page shell with <code>{{ content }}</code> as a placeholder</li>
+          <li>Pages reference layouts with <code>&lt;layout src="..."&gt;</code></li>
+          <li>Page content goes inside <code>&lt;content&gt;...&lt;/content&gt;</code></li>
+          <li>Named slots (<code>&lt;slot:name&gt;</code>) create multiple content areas</li>
+          <li>Variables like <code>{{ title }}</code> in layouts get filled by page data blocks</li>
+          <li>You can create multiple layouts for different page types</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="01-getting-started.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Getting Started</span>
+        </a>
+        <a href="03-components.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Components & Props</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

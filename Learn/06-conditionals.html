@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6: Conditionals — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 06 of 10</div>
+        <h1>Conditionals</h1>
+        <p class="lesson-desc">Show or hide content based on your data. Master {{#if}}, {{else}}, and {{#unless}} to build dynamic pages that adapt to different states.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#if">Basic {{#if}}</a></li>
+          <li><a href="#else">If / Else</a></li>
+          <li><a href="#unless">{{#unless}} — Inverse Conditional</a></li>
+          <li><a href="#truthy">Truthy & Falsy Values</a></li>
+          <li><a href="#patterns">Common Patterns</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Basic If -->
+      <div class="section" id="if">
+        <h2>Basic {{#if}}</h2>
+        <p>Show content only when a variable is truthy:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Basic If</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">showBanner</span>: <span class="hl-keyword">true</span>,
+  <span class="hl-attr">announcement</span>: <span class="hl-string">"Version 1.2 is out! 🎉"</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">showBanner</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"banner"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-bracket">{{</span> <span class="hl-var">announcement</span> <span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <p>Since <code>showBanner</code> is <code>true</code>, the banner is rendered. Set it to <code>false</code> and the banner disappears entirely from the HTML output.</p>
+
+        <div class="result-preview">
+          <div style="background: #e8f5e9; padding: 0.75rem 1rem; border-radius: 8px; text-align: center; color: #2e7d32; font-weight: 600;">
+            Version 1.2 is out! 🎉
+          </div>
+        </div>
+      </div>
+
+      <!-- If/Else -->
+      <div class="section" id="else">
+        <h2>If / Else</h2>
+        <p>Add an <code>{{else}}</code> branch for when the condition is falsy:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">If / Else</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">loggedIn</span>: <span class="hl-keyword">false</span>,
+  <span class="hl-attr">username</span>: <span class="hl-string">"Dan"</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">loggedIn</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;p&gt;</span>Welcome back, <span class="hl-bracket">{{</span> <span class="hl-var">username</span> <span class="hl-bracket">}}</span>!<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;button&gt;</span>Logout<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">else</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;p&gt;</span>Please sign in to continue.<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;button&gt;</span>Login<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <p>Since <code>loggedIn</code> is <code>false</code>, the <strong>else branch</strong> renders:</p>
+        <div class="result-preview">
+          <p>Please sign in to continue.</p>
+          <button style="background: #6c5ce7; color: #fff; border: none; padding: 0.5rem 1.25rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">Login</button>
+        </div>
+      </div>
+
+      <!-- Unless -->
+      <div class="section" id="unless">
+        <h2>{{#unless}} — Inverse Conditional</h2>
+        <p><code>{{#unless}}</code> is the opposite of <code>{{#if}}</code> — it renders when the variable is <strong>falsy</strong>.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Unless Block</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">hideFooter</span>: <span class="hl-keyword">false</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#unless</span> <span class="hl-var">hideFooter</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;footer&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>This footer appears because hideFooter is false.<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/footer&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/unless</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <div class="info-box note">
+          <span class="icon">📐</span>
+          <p><strong>When to use {{#unless}}:</strong> It's cleaner than <code>{{#if}}</code> + negation. Use it when you want <em>"show this unless X is true"</em>.</p>
+        </div>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Less Readable ❌</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-comment">&lt;!-- Confusing double-negative --&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">showFooter</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;footer&gt;</span>...<span class="hl-tag">&lt;/footer&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">More Readable ✅</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-comment">&lt;!-- Clear intent --&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">#unless</span> <span class="hl-var">hideFooter</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;footer&gt;</span>...<span class="hl-tag">&lt;/footer&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/unless</span><span class="hl-bracket">}}</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Truthy & Falsy -->
+      <div class="section" id="truthy">
+        <h2>Truthy & Falsy Values</h2>
+        <p>OrbLayout follows JavaScript's truthy/falsy rules:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Result</th><th>{{#if}} renders?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>true</code></td><td style="color: #00e676;">Truthy</td><td>✅ Yes</td></tr>
+              <tr><td><code>"hello"</code></td><td style="color: #00e676;">Truthy</td><td>✅ Yes</td></tr>
+              <tr><td><code>42</code></td><td style="color: #00e676;">Truthy</td><td>✅ Yes</td></tr>
+              <tr><td><code>"true"</code></td><td style="color: #00e676;">Truthy</td><td>✅ Yes</td></tr>
+              <tr><td><code>false</code></td><td style="color: #ff5252;">Falsy</td><td>❌ No</td></tr>
+              <tr><td><code>""</code> (empty string)</td><td style="color: #ff5252;">Falsy</td><td>❌ No</td></tr>
+              <tr><td><code>0</code></td><td style="color: #ff5252;">Falsy</td><td>❌ No</td></tr>
+              <tr><td><code>null</code></td><td style="color: #ff5252;">Falsy</td><td>❌ No</td></tr>
+              <tr><td><code>undefined</code></td><td style="color: #ff5252;">Falsy</td><td>❌ No</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box warn">
+          <span class="icon">⚠️</span>
+          <p><strong>Note:</strong> If a variable doesn't exist in your data block, it's <code>undefined</code> (falsy). So <code>{{#if missingVar}}</code> won't render.</p>
+        </div>
+      </div>
+
+      <!-- Common Patterns -->
+      <div class="section" id="patterns">
+        <h2>Common Patterns</h2>
+
+        <h3>Toggle components</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Conditional Components</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">showHero</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"hero"</span> <span class="hl-attr">heading</span>=<span class="hl-string">"Welcome!"</span> <span class="hl-tag">/&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <h3>Conditionals inside loops</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">If Inside Each</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">products</span>: [
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Widget"</span>, <span class="hl-attr">price</span>: <span class="hl-string">9.99</span>, <span class="hl-attr">onSale</span>: <span class="hl-keyword">true</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Gadget"</span>, <span class="hl-attr">price</span>: <span class="hl-string">24.99</span>, <span class="hl-attr">onSale</span>: <span class="hl-keyword">false</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Doohickey"</span>, <span class="hl-attr">price</span>: <span class="hl-string">4.99</span>, <span class="hl-attr">onSale</span>: <span class="hl-keyword">true</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">products</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"product"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>$<span class="hl-bracket">{{</span> <span class="hl-var">price</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">onSale</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"sale-badge"</span><span class="hl-tag">&gt;</span>🔥 SALE<span class="hl-tag">&lt;/span&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <h3>Conditional CSS classes (with loop helpers)</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Dynamic Classes</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">items</span><span class="hl-bracket">}}</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">@first</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"item first-item"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/div&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">else</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"item"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/div&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 6 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Conditionally render content with <code>{{#if variable}}</code></li>
+          <li>Provide fallback content with <code>{{else}}</code></li>
+          <li>Invert conditions with <code>{{#unless variable}}</code></li>
+          <li>Understand truthy vs falsy values</li>
+          <li>Combine conditionals with loops and components</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="05-loops.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Loops & Iteration</span>
+        </a>
+        <a href="07-filters.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Pipe Filters</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

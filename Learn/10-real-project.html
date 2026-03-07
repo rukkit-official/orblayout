@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10: Build a Real Project — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 10 of 10 — Final Project</div>
+        <h1>Build a Real Website</h1>
+        <p class="lesson-desc">Put everything together. Build a complete developer portfolio from scratch using layouts, components, loops, conditionals, filters, markdown, and deploy it live.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#goal">The Goal</a></li>
+          <li><a href="#scaffold">Step 1 — Scaffold</a></li>
+          <li><a href="#layout">Step 2 — Layout</a></li>
+          <li><a href="#components">Step 3 — Components</a></li>
+          <li><a href="#homepage">Step 4 — Homepage</a></li>
+          <li><a href="#projects">Step 5 — Projects Page</a></li>
+          <li><a href="#blog">Step 6 — Blog Post</a></li>
+          <li><a href="#styles">Step 7 — Global Styles</a></li>
+          <li><a href="#build-deploy">Step 8 — Build &amp; Deploy</a></li>
+          <li><a href="#recap">Course Recap</a></li>
+        </ol>
+      </div>
+
+      <!-- The Goal -->
+      <div class="section" id="goal">
+        <h2>The Goal</h2>
+        <p>We'll build <strong>a developer portfolio website</strong> with:</p>
+        <ul style="color: var(--text-dim); line-height: 2;">
+          <li>A shared layout with header &amp; footer</li>
+          <li>Reusable components (nav, hero, project card, skill badge)</li>
+          <li>Dynamic data with <code>&lt;script data&gt;</code></li>
+          <li>Loops to render project cards &amp; skill badges</li>
+          <li>Conditionals for featured projects</li>
+          <li>Filters for formatting text</li>
+          <li>A markdown blog post</li>
+          <li>Production-ready minified output</li>
+        </ul>
+
+        <h3>Final project structure</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Directory tree</span>
+            <span class="code-lang">files</span>
+          </div>
+          <pre><code>portfolio/
+├── orb.config.json
+├── package.json
+├── layouts/
+│   └── main.layout
+├── components/
+│   ├── nav.orb
+│   ├── hero.orb
+│   ├── project-card.orb
+│   ├── skill-badge.orb
+│   └── footer.orb
+├── pages/
+│   ├── index.orb          <span class="hl-comment"># Homepage</span>
+│   ├── projects.orb       <span class="hl-comment"># Projects page</span>
+│   └── blog/
+│       └── hello-world.orb <span class="hl-comment"># Blog post</span>
+├── assets/
+│   └── style.css
+└── dist/                   <span class="hl-comment"># ← Generated output</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Step 1: Scaffold -->
+      <div class="section" id="scaffold">
+        <h2>Step 1 — Scaffold the Project</h2>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">mkdir</span> portfolio && <span class="hl-keyword">cd</span> portfolio
+<span class="hl-keyword">npm</span> init -y
+<span class="hl-keyword">npm</span> install orblayout
+<span class="hl-keyword">npx</span> orb init</code></pre>
+        </div>
+
+        <p>Update your <code>package.json</code> scripts:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">package.json (scripts section)</span>
+            <span class="code-lang">json</span>
+          </div>
+          <pre><code>{
+  <span class="hl-attr">"scripts"</span>: {
+    <span class="hl-attr">"dev"</span>:   <span class="hl-string">"orb dev"</span>,
+    <span class="hl-attr">"build"</span>: <span class="hl-string">"orb build"</span>,
+    <span class="hl-attr">"prod"</span>:  <span class="hl-string">"orb clean && orb build --minify"</span>
+  }
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 2: Layout -->
+      <div class="section" id="layout">
+        <h2>Step 2 — Create the Layout</h2>
+        <p>This layout wraps every page with a consistent HTML shell, nav, and footer.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">layouts/main.layout</span>
+            <span class="code-lang">.layout</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="hl-tag">&lt;html</span> <span class="hl-attr">lang</span>=<span class="hl-string">"en"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;head&gt;</span>
+  <span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span>=<span class="hl-string">"UTF-8"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;meta</span> <span class="hl-attr">name</span>=<span class="hl-string">"viewport"</span>
+    <span class="hl-attr">content</span>=<span class="hl-string">"width=device-width, initial-scale=1.0"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;title&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span> — Portfolio<span class="hl-tag">&lt;/title&gt;</span>
+  <span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-string">"stylesheet"</span>
+    <span class="hl-attr">href</span>=<span class="hl-string">"/assets/style.css"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-bracket">{{</span> <span class="hl-var">head</span> <span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/head&gt;</span>
+<span class="hl-tag">&lt;body&gt;</span>
+
+  <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"nav"</span> <span class="hl-attr">active</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">navActive</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+
+  <span class="hl-tag">&lt;main&gt;</span>
+    <span class="hl-bracket">{{</span> <span class="hl-var">content</span> <span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/main&gt;</span>
+
+  <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"footer"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-tag">&lt;/body&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Named slot:</strong> <code>{{ head }}</code> lets each page inject custom meta tags or styles into <code>&lt;head&gt;</code>.</p>
+        </div>
+      </div>
+
+      <!-- Step 3: Components -->
+      <div class="section" id="components">
+        <h2>Step 3 — Build Components</h2>
+
+        <h3>Navigation</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/nav.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;nav</span> <span class="hl-attr">class</span>=<span class="hl-string">"site-nav"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/"</span> <span class="hl-attr">class</span>=<span class="hl-string">"logo"</span><span class="hl-tag">&gt;</span>◉ Dan<span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-tag">&lt;ul&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span><span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/"</span><span class="hl-tag">&gt;</span>Home<span class="hl-tag">&lt;/a&gt;</span><span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span><span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/projects"</span><span class="hl-tag">&gt;</span>Projects<span class="hl-tag">&lt;/a&gt;</span><span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span><span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/blog/hello-world"</span><span class="hl-tag">&gt;</span>Blog<span class="hl-tag">&lt;/a&gt;</span><span class="hl-tag">&lt;/li&gt;</span>
+  <span class="hl-tag">&lt;/ul&gt;</span>
+<span class="hl-tag">&lt;/nav&gt;</span></code></pre>
+        </div>
+
+        <h3>Hero Section</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/hero.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;section</span> <span class="hl-attr">class</span>=<span class="hl-string">"hero"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">heading</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">subheading</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">cta</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">ctaLink</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-attr">class</span>=<span class="hl-string">"btn"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">cta</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/section&gt;</span></code></pre>
+        </div>
+
+        <h3>Project Card</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/project-card.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;style&gt;</span>
+.project-card {
+  background: #111;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #222;
+  transition: transform 0.2s;
+}
+.project-card:hover { transform: translateY(-4px); }
+.project-card h3 { margin: 0 0 0.5rem; }
+.project-card .tag {
+  display: inline-block;
+  background: #6c5ce7;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+}
+<span class="hl-tag">&lt;/style&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"project-card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">description</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"tag"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">tech</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/span&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">url</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">url</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>View →<span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>Skill Badge</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/skill-badge.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"skill-badge"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/span&gt;</span></code></pre>
+        </div>
+
+        <h3>Footer</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/footer.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;footer</span> <span class="hl-attr">class</span>=<span class="hl-string">"site-footer"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>&amp;copy; <span class="hl-bracket">{{</span> <span class="hl-var">@page.year</span> <span class="hl-bracket">}}</span> Dan — Built with
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"https://github.com/rukkit-official/orblayout"</span><span class="hl-tag">&gt;</span>OrbLayout<span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/footer&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Step 4: Homepage -->
+      <div class="section" id="homepage">
+        <h2>Step 4 — Build the Homepage</h2>
+        <p>The homepage brings it all together: data, components, loops, conditionals, and filters.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/index.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Home"</span>,
+  <span class="hl-attr">navActive</span>: <span class="hl-string">"home"</span>,
+  <span class="hl-attr">name</span>: <span class="hl-string">"Dan"</span>,
+  <span class="hl-attr">role</span>: <span class="hl-string">"full-stack developer"</span>,
+  <span class="hl-attr">skills</span>: [
+    <span class="hl-string">"JavaScript"</span>, <span class="hl-string">"Node.js"</span>, <span class="hl-string">"React"</span>,
+    <span class="hl-string">"Python"</span>, <span class="hl-string">"CSS"</span>, <span class="hl-string">"OrbLayout"</span>
+  ],
+  <span class="hl-attr">featuredProjects</span>: [
+    {
+      <span class="hl-attr">name</span>: <span class="hl-string">"OrbLayout"</span>,
+      <span class="hl-attr">description</span>: <span class="hl-string">"A lightweight static site builder"</span>,
+      <span class="hl-attr">tech</span>: <span class="hl-string">"Node.js"</span>,
+      <span class="hl-attr">url</span>: <span class="hl-string">"https://github.com/rukkit-official/orblayout"</span>
+    },
+    {
+      <span class="hl-attr">name</span>: <span class="hl-string">"TaskFlow"</span>,
+      <span class="hl-attr">description</span>: <span class="hl-string">"Minimal task management app"</span>,
+      <span class="hl-attr">tech</span>: <span class="hl-string">"React"</span>,
+      <span class="hl-attr">url</span>: <span class="hl-string">""</span>
+    }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+
+    <span class="hl-comment">&lt;!-- Hero using a component --&gt;</span>
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"hero"</span>
+      <span class="hl-attr">heading</span>=<span class="hl-string">"Hi, I'm <span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span>
+      <span class="hl-attr">subheading</span>=<span class="hl-string">"I'm a <span class="hl-bracket">{{</span> <span class="hl-var">role</span> | <span class="hl-keyword">capitalize</span> <span class="hl-bracket">}}</span>"</span>
+      <span class="hl-attr">cta</span>=<span class="hl-string">"View Projects"</span>
+      <span class="hl-attr">ctaLink</span>=<span class="hl-string">"/projects"</span> <span class="hl-tag">/&gt;</span>
+
+    <span class="hl-comment">&lt;!-- Skills — loop over primitives --&gt;</span>
+    <span class="hl-tag">&lt;section</span> <span class="hl-attr">class</span>=<span class="hl-string">"skills"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;h2&gt;</span>Skills<span class="hl-tag">&lt;/h2&gt;</span>
+      <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"skill-list"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">skills</span><span class="hl-bracket">}}</span>
+          <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"skill-badge"</span>
+            <span class="hl-attr">name</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">this</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+        <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/section&gt;</span>
+
+    <span class="hl-comment">&lt;!-- Featured Projects — loop over objects --&gt;</span>
+    <span class="hl-tag">&lt;section</span> <span class="hl-attr">class</span>=<span class="hl-string">"featured"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;h2&gt;</span>Featured Projects<span class="hl-tag">&lt;/h2&gt;</span>
+      <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"projects-grid"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">featuredProjects</span><span class="hl-bracket">}}</span>
+          <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"project-card"</span>
+            <span class="hl-attr">name</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span>
+            <span class="hl-attr">description</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">description</span> <span class="hl-bracket">}}</span>"</span>
+            <span class="hl-attr">tech</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">tech</span> <span class="hl-bracket">}}</span>"</span>
+            <span class="hl-attr">url</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">url</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+        <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/section&gt;</span>
+
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">🔍</span>
+          <p><strong>Spot the features:</strong> Data block, layout, 3 components, 2 loops, filters (<code>capitalize</code>), conditional (<code>{{#if url}}</code> inside project-card), and <code>@page.year</code> in the footer.</p>
+        </div>
+      </div>
+
+      <!-- Step 5: Projects Page -->
+      <div class="section" id="projects">
+        <h2>Step 5 — Projects Page</h2>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/projects.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Projects"</span>,
+  <span class="hl-attr">navActive</span>: <span class="hl-string">"projects"</span>,
+  <span class="hl-attr">projects</span>: [
+    {
+      <span class="hl-attr">name</span>: <span class="hl-string">"OrbLayout"</span>,
+      <span class="hl-attr">description</span>: <span class="hl-string">"Lightweight static site builder with components, layouts, and zero config"</span>,
+      <span class="hl-attr">tech</span>: <span class="hl-string">"Node.js"</span>,
+      <span class="hl-attr">url</span>: <span class="hl-string">"https://github.com/rukkit-official/orblayout"</span>,
+      <span class="hl-attr">featured</span>: <span class="hl-keyword">true</span>
+    },
+    {
+      <span class="hl-attr">name</span>: <span class="hl-string">"TaskFlow"</span>,
+      <span class="hl-attr">description</span>: <span class="hl-string">"Minimal task management app with drag-and-drop"</span>,
+      <span class="hl-attr">tech</span>: <span class="hl-string">"React"</span>,
+      <span class="hl-attr">url</span>: <span class="hl-string">""</span>,
+      <span class="hl-attr">featured</span>: <span class="hl-keyword">false</span>
+    },
+    {
+      <span class="hl-attr">name</span>: <span class="hl-string">"PixelSnap"</span>,
+      <span class="hl-attr">description</span>: <span class="hl-string">"Screenshot annotation tool"</span>,
+      <span class="hl-attr">tech</span>: <span class="hl-string">"Electron"</span>,
+      <span class="hl-attr">url</span>: <span class="hl-string">"https://pixelsnap.dev"</span>,
+      <span class="hl-attr">featured</span>: <span class="hl-keyword">true</span>
+    }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"projects-grid"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">projects</span><span class="hl-bracket">}}</span>
+        <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"project-card"</span>
+          <span class="hl-attr">name</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span>
+          <span class="hl-attr">description</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">description</span> | <span class="hl-keyword">truncate</span> <span class="hl-bracket">}}</span>"</span>
+          <span class="hl-attr">tech</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">tech</span> <span class="hl-bracket">}}</span>"</span>
+          <span class="hl-attr">url</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">url</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+      <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+
+    <span class="hl-tag">&lt;p&gt;</span>Showing <span class="hl-bracket">{{</span> <span class="hl-var">projects</span> | <span class="hl-keyword">length</span> <span class="hl-bracket">}}</span> projects<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Step 6: Blog Post -->
+      <div class="section" id="blog">
+        <h2>Step 6 — Blog Post with Markdown</h2>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/blog/hello-world.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Hello World"</span>,
+  <span class="hl-attr">navActive</span>: <span class="hl-string">"blog"</span>,
+  <span class="hl-attr">author</span>: {
+    <span class="hl-attr">name</span>: <span class="hl-string">"Dan"</span>,
+    <span class="hl-attr">role</span>: <span class="hl-string">"Creator"</span>
+  }
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;slot:head&gt;</span>
+    <span class="hl-tag">&lt;meta</span> <span class="hl-attr">property</span>=<span class="hl-string">"og:title"</span>
+      <span class="hl-attr">content</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;/slot:head&gt;</span>
+
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;article</span> <span class="hl-attr">class</span>=<span class="hl-string">"blog-post"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+
+      <span class="hl-bracket">{{</span><span class="hl-keyword">#with</span> <span class="hl-var">author</span><span class="hl-bracket">}}</span>
+        <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span>=<span class="hl-string">"byline"</span><span class="hl-tag">&gt;</span>
+          By <span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>, <span class="hl-bracket">{{</span> <span class="hl-var">role</span> <span class="hl-bracket">}}</span>
+        <span class="hl-tag">&lt;/p&gt;</span>
+      <span class="hl-bracket">{{</span><span class="hl-keyword">/with</span><span class="hl-bracket">}}</span>
+
+      <span class="hl-tag">&lt;time&gt;</span>Published <span class="hl-bracket">{{</span> <span class="hl-var">@page.date</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/time&gt;</span>
+
+      <span class="hl-tag">&lt;markdown&gt;</span>
+## Why I built OrbLayout
+
+I wanted a static site builder that felt like
+writing **real HTML**, not a framework.
+
+### The problems with existing tools
+
+- Too much JavaScript
+- Complex build configs
+- Templates that don't look like HTML
+- Slow builds
+
+### How OrbLayout is different
+
+OrbLayout uses `.orb` files that are just
+HTML with superpowers:
+
+- **Layouts** for shared page shells
+- **Components** for reusable UI blocks
+- **Loops** and **conditionals** for dynamic content
+- **Filters** for text transformation
+- **Markdown** for content-heavy pages
+- **Zero config** to get started
+
+---
+
+Thanks for reading! Star us on
+[GitHub](https://github.com/rukkit-official/orblayout).
+      <span class="hl-tag">&lt;/markdown&gt;</span>
+    <span class="hl-tag">&lt;/article&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">🎯</span>
+          <p><strong>Features used:</strong> Data block, layout, named slot (<code>slot:head</code>), <code>{{#with}}</code>, <code>@page.date</code>, <code>&lt;markdown&gt;</code> block. Six features in one page!</p>
+        </div>
+      </div>
+
+      <!-- Step 7: Styles -->
+      <div class="section" id="styles">
+        <h2>Step 7 — Global Styles</h2>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">assets/style.css</span>
+            <span class="code-lang">css</span>
+          </div>
+          <pre><code><span class="hl-comment">/* Reset & base */</span>
+<span class="hl-keyword">*</span> { margin: 0; padding: 0; box-sizing: border-box; }
+<span class="hl-keyword">body</span> {
+  font-family: system-ui, sans-serif;
+  background: #0a0a1a;
+  color: #e0e0e0;
+  line-height: 1.6;
+}
+
+<span class="hl-comment">/* Navigation */</span>
+<span class="hl-keyword">.site-nav</span> {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #1a1a2e;
+}
+<span class="hl-keyword">.site-nav ul</span> { list-style: none; display: flex; gap: 1.5rem; }
+<span class="hl-keyword">.site-nav a</span> { color: #a0a0b0; text-decoration: none; }
+<span class="hl-keyword">.site-nav a:hover</span> { color: #6c5ce7; }
+
+<span class="hl-comment">/* Hero */</span>
+<span class="hl-keyword">.hero</span> {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+<span class="hl-keyword">.hero h1</span> { font-size: 3rem; }
+<span class="hl-keyword">.hero .btn</span> {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 2rem;
+  background: #6c5ce7;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+<span class="hl-comment">/* Skills */</span>
+<span class="hl-keyword">.skill-list</span> { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+<span class="hl-keyword">.skill-badge</span> {
+  background: #1a1a2e;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  border: 1px solid #2a2a4e;
+}
+
+<span class="hl-comment">/* Projects grid */</span>
+<span class="hl-keyword">.projects-grid</span> {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+<span class="hl-comment">/* Blog */</span>
+<span class="hl-keyword">.blog-post</span> { max-width: 680px; margin: 0 auto; padding: 3rem 2rem; }
+<span class="hl-keyword">.byline</span> { color: #888; margin: 0.5rem 0; }
+
+<span class="hl-comment">/* Footer */</span>
+<span class="hl-keyword">.site-footer</span> {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #1a1a2e;
+  color: #666;
+}
+<span class="hl-keyword">.site-footer a</span> { color: #6c5ce7; }</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 8: Build & Deploy -->
+      <div class="section" id="build-deploy">
+        <h2>Step 8 — Build &amp; Deploy</h2>
+
+        <h3>Build for production</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code><span class="hl-keyword">npm</span> run prod
+
+<span class="hl-comment"># Output:</span>
+<span class="hl-comment">#   ✓ index.orb → index.html</span>
+<span class="hl-comment">#   ✓ projects.orb → projects.html</span>
+<span class="hl-comment">#   ✓ blog/hello-world.orb → blog/hello-world.html</span>
+<span class="hl-comment">#   ✓ Assets copied</span>
+<span class="hl-comment">#   Done! 3 page(s) compiled in 18ms</span></code></pre>
+        </div>
+
+        <p>Your <code>dist/</code> folder now contains pure HTML, CSS, and assets — ready to deploy anywhere.</p>
+
+        <h3>Deploy to GitHub Pages</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">.github/workflows/deploy.yml</span>
+            <span class="code-lang">yaml</span>
+          </div>
+          <pre><code><span class="hl-attr">name</span>: Deploy
+<span class="hl-attr">on</span>:
+  <span class="hl-attr">push</span>:
+    <span class="hl-attr">branches</span>: [main]
+
+<span class="hl-attr">jobs</span>:
+  <span class="hl-attr">deploy</span>:
+    <span class="hl-attr">runs-on</span>: ubuntu-latest
+    <span class="hl-attr">steps</span>:
+      - <span class="hl-attr">uses</span>: actions/checkout@v4
+      - <span class="hl-attr">uses</span>: actions/setup-node@v4
+        <span class="hl-attr">with</span>:
+          <span class="hl-attr">node-version</span>: <span class="hl-string">"20"</span>
+      - <span class="hl-keyword">run</span>: npm install
+      - <span class="hl-keyword">run</span>: npx orb build --minify
+      - <span class="hl-attr">uses</span>: peaceiris/actions-gh-pages@v3
+        <span class="hl-attr">with</span>:
+          <span class="hl-attr">publish_dir</span>: ./dist</code></pre>
+        </div>
+
+        <h3>Deploy to Netlify</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">netlify.toml</span>
+            <span class="code-lang">toml</span>
+          </div>
+          <pre><code>[build]
+  <span class="hl-attr">command</span> = <span class="hl-string">"npx orb build --minify"</span>
+  <span class="hl-attr">publish</span> = <span class="hl-string">"dist"</span></code></pre>
+        </div>
+
+        <h3>Deploy to Vercel</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">vercel.json</span>
+            <span class="code-lang">json</span>
+          </div>
+          <pre><code>{
+  <span class="hl-attr">"buildCommand"</span>: <span class="hl-string">"npx orb build --minify"</span>,
+  <span class="hl-attr">"outputDirectory"</span>: <span class="hl-string">"dist"</span>
+}</code></pre>
+        </div>
+
+        <h3>Deploy to Cloudflare Pages</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Cloudflare Pages Settings</span>
+            <span class="code-lang">config</span>
+          </div>
+          <pre><code><span class="hl-attr">Build command</span>:     npx orb build --minify
+<span class="hl-attr">Build output</span>:      dist
+<span class="hl-attr">Node version</span>:      20</code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">🚀</span>
+          <p><strong>It's just static files!</strong> OrbLayout outputs pure HTML/CSS/JS — no server-side runtime needed. Deploy to any static hosting provider.</p>
+        </div>
+      </div>
+
+      <!-- Course Recap -->
+      <div class="section" id="recap">
+        <h2>Course Recap — Everything You've Learned</h2>
+        <p>Congratulations! You've completed the entire OrbLayout course. Here's what you now know:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Lesson</th><th>Feature</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>01</td><td>Installation, scaffolding, project structure, build pipeline</td><td>✅</td></tr>
+              <tr><td>02</td><td>Layouts, <code>{{ content }}</code>, named slots, multiple layouts</td><td>✅</td></tr>
+              <tr><td>03</td><td>Components, props, nesting, styles, imports &amp; aliases</td><td>✅</td></tr>
+              <tr><td>04</td><td>Data blocks, variables, types, nested objects, <code>@page.*</code></td><td>✅</td></tr>
+              <tr><td>05</td><td>Loops, <code>{{ this }}</code>, loop helpers, components in loops</td><td>✅</td></tr>
+              <tr><td>06</td><td>Conditionals, <code>{{#if}}</code>, <code>{{else}}</code>, <code>{{#unless}}</code>, truthy/falsy</td><td>✅</td></tr>
+              <tr><td>07</td><td>All 12 built-in filters, chaining, custom filters API</td><td>✅</td></tr>
+              <tr><td>08</td><td>Markdown blocks, <code>{{#with}}</code>, partials, <code>:class</code> directives</td><td>✅</td></tr>
+              <tr><td>09</td><td>CLI commands, dev server, config, npm scripts, programmatic API</td><td>✅</td></tr>
+              <tr><td>10</td><td>Built a complete portfolio with deployment configs</td><td>✅</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box" style="border-color: #6c5ce7; background: rgba(108, 92, 231, 0.08);">
+          <span class="icon">🎉</span>
+          <div>
+            <p style="font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem;">You've completed the OrbLayout Learning Course!</p>
+            <p style="color: var(--text-dim);">You're now equipped to build any static website with OrbLayout — from personal blogs and portfolios to documentation sites and landing pages.</p>
+            <p style="margin-top: 1rem;">
+              <a href="https://github.com/rukkit-official/orblayout" target="_blank" style="color: #a29bfe; font-weight: 600;">⭐ Star on GitHub</a>
+              &nbsp;&nbsp;·&nbsp;&nbsp;
+              <a href="https://www.npmjs.com/package/orblayout" target="_blank" style="color: #a29bfe; font-weight: 600;">📦 View on npm</a>
+              &nbsp;&nbsp;·&nbsp;&nbsp;
+              <a href="index.html" style="color: #a29bfe; font-weight: 600;">📚 Back to Course Index</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Final Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">After this lesson you can:</p>
+        <ol>
+          <li>Build a complete multi-page website from scratch</li>
+          <li>Structure a project with layouts, components, and pages</li>
+          <li>Use data, loops, conditionals, filters, and markdown together</li>
+          <li>Build production-ready minified output</li>
+          <li>Deploy to GitHub Pages, Netlify, Vercel, or Cloudflare Pages</li>
+          <li>Confidently build anything with OrbLayout 💪</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="09-cli-tooling.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">CLI & Dev Server</span>
+        </a>
+        <a href="index.html" class="next">
+          <span class="nav-label">Back to Course →</span>
+          <span class="nav-title">Learning Center</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

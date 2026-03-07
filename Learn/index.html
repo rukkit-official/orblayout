@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbLayout Learning Center — Master the Modern Static Site Builder</title>
+  <meta name="description" content="Learn OrbLayout from zero to hero. 10 interactive lessons covering layouts, components, props, loops, filters, markdown, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .hero-visual {
+      margin: 2.5rem auto 0;
+      max-width: 520px;
+      background: var(--bg-code);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow), var(--shadow-glow);
+    }
+    .hero-visual .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: rgba(108, 92, 231, 0.06);
+      border-bottom: 1px solid rgba(108, 92, 231, 0.08);
+    }
+    .hero-visual .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.r { background: #ff5f56; }
+    .dot.y { background: #ffbd2e; }
+    .dot.g { background: #27c93f; }
+    .hero-visual pre {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+    .stat { text-align: center; }
+    .stat .stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat .stat-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .path-section { margin-top: 3rem; text-align: center; }
+    .path-section h2 {
+      font-size: 1.8rem; font-weight: 800; color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .path-section p {
+      color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem;
+    }
+    .cta-box {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(162, 155, 254, 0.05));
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      border-radius: var(--radius);
+    }
+    .cta-box h2 {
+      font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;
+    }
+    .cta-box p { color: var(--text-dim); margin-bottom: 1.5rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: linear-gradient(135deg, var(--accent), #7c6cf0);
+      color: #fff; font-weight: 700; font-size: 0.9rem;
+      border-radius: 99px; border: none; cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+      color: #fff;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid rgba(108, 92, 231, 0.4);
+      color: var(--accent-light);
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="top-nav">
+    <a class="logo" href="index.html">
+      <span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="hero animate-in">
+        <div class="badge">Free · 10 Lessons · Complete Course</div>
+        <h1>Learn OrbLayout<br>From Zero to Hero</h1>
+        <p class="subtitle">
+          Master the modern static site builder in 10 hands-on lessons.
+          Build with layouts, components, props, loops, filters — and ship pure HTML.
+        </p>
+        <div class="btn-group">
+          <a href="01-getting-started.html" class="btn">Start Learning →</a>
+          <a href="https://github.com/rukkit-official/orblayout" class="btn btn-outline" target="_blank">⭐ Star on GitHub</a>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="hero-visual animate-in delay-1">
+        <div class="window-bar">
+          <span class="dot r"></span>
+          <span class="dot y"></span>
+          <span class="dot g"></span>
+          <span style="margin-left: auto; font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">index.orb</span>
+        </div>
+        <pre><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"hero"</span>
+      <span class="hl-attr">heading</span>=<span class="hl-string">"Hello World"</span> <span class="hl-tag">/&gt;</span>
+
+    <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">features</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+        <span class="hl-attr">title</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span>
+        <span class="hl-attr">description</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">desc</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></pre>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row animate-in delay-2">
+        <div class="stat">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Lessons</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">25+</div>
+          <div class="stat-label">Features</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Code Examples</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">0</div>
+          <div class="stat-label">Cost ($)</div>
+        </div>
+      </div>
+
+      <!-- Course Path -->
+      <div class="path-section animate-in delay-3">
+        <h2>Your Learning Path</h2>
+        <p>From first install to deploying a real website. Each lesson builds on the last.</p>
+      </div>
+
+      <!-- Lessons Grid -->
+      <div class="lessons-grid animate-in delay-4">
+
+        <a href="01-getting-started.html" class="lesson-card">
+          <span class="lesson-num">Lesson 01</span>
+          <h3>Getting Started</h3>
+          <p>Install OrbLayout, scaffold your first project, and understand the file structure.</p>
+          <span class="tag beginner">Beginner</span>
+        </a>
+
+        <a href="02-layouts.html" class="lesson-card">
+          <span class="lesson-num">Lesson 02</span>
+          <h3>Layouts & Page Structure</h3>
+          <p>Create reusable page templates with layouts, content slots, and named slots.</p>
+          <span class="tag beginner">Beginner</span>
+        </a>
+
+        <a href="03-components.html" class="lesson-card">
+          <span class="lesson-num">Lesson 03</span>
+          <h3>Components & Props</h3>
+          <p>Build reusable UI blocks, pass data with props, and nest components.</p>
+          <span class="tag beginner">Beginner</span>
+        </a>
+
+        <a href="04-data-variables.html" class="lesson-card">
+          <span class="lesson-num">Lesson 04</span>
+          <h3>Data & Variables</h3>
+          <p>Define page data, use variables, and leverage built-in @page.* meta.</p>
+          <span class="tag beginner">Beginner</span>
+        </a>
+
+        <a href="05-loops.html" class="lesson-card">
+          <span class="lesson-num">Lesson 05</span>
+          <h3>Loops & Iteration</h3>
+          <p>Iterate over arrays with {{#each}}, use @index, @first, @last, @count helpers.</p>
+          <span class="tag intermediate">Intermediate</span>
+        </a>
+
+        <a href="06-conditionals.html" class="lesson-card">
+          <span class="lesson-num">Lesson 06</span>
+          <h3>Conditionals</h3>
+          <p>Show and hide content with {{#if}}, {{else}}, and {{#unless}} blocks.</p>
+          <span class="tag intermediate">Intermediate</span>
+        </a>
+
+        <a href="07-filters.html" class="lesson-card">
+          <span class="lesson-num">Lesson 07</span>
+          <h3>Pipe Filters</h3>
+          <p>Transform data inline with 12 built-in filters and chain them together.</p>
+          <span class="tag intermediate">Intermediate</span>
+        </a>
+
+        <a href="08-advanced.html" class="lesson-card">
+          <span class="lesson-num">Lesson 08</span>
+          <h3>Advanced Features</h3>
+          <p>Markdown blocks, {{#with}} scoping, partials, imports, :class directives.</p>
+          <span class="tag advanced">Advanced</span>
+        </a>
+
+        <a href="09-cli-tooling.html" class="lesson-card">
+          <span class="lesson-num">Lesson 09</span>
+          <h3>CLI & Dev Server</h3>
+          <p>Master every CLI command, dev server, live reload, and programmatic API.</p>
+          <span class="tag advanced">Advanced</span>
+        </a>
+
+        <a href="10-real-project.html" class="lesson-card">
+          <span class="lesson-num">Lesson 10</span>
+          <h3>Build a Real Website</h3>
+          <p>Put it all together — build a complete portfolio site from scratch and deploy it.</p>
+          <span class="tag advanced">Advanced</span>
+        </a>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-box">
+        <h2>Ready to Build?</h2>
+        <p>Start with Lesson 1 and you'll be shipping static sites in under 30 minutes.</p>
+        <a href="01-getting-started.html" class="btn">Begin Lesson 1 →</a>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

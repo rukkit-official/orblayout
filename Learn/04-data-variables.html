@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4: Data & Variables — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 40%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 04 of 10</div>
+        <h1>Data & Variables</h1>
+        <p class="lesson-desc">Define page-level data, use variables to inject values into your HTML, and access built-in page metadata. This is what makes your static pages dynamic.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#data-blocks">Data Blocks</a></li>
+          <li><a href="#variables">Using Variables</a></li>
+          <li><a href="#data-types">Supported Data Types</a></li>
+          <li><a href="#nested">Nested Objects</a></li>
+          <li><a href="#page-vars">Built-in @page.* Variables</a></li>
+          <li><a href="#flow">Data Flow: Page → Layout → Component</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Data Blocks -->
+      <div class="section" id="data-blocks">
+        <h2>Data Blocks</h2>
+        <p>A data block is a <code>&lt;script data&gt;</code> tag at the top of your <code>.orb</code> page that defines the page's data as a JavaScript object.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/index.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Home"</span>,
+  <span class="hl-attr">author</span>: <span class="hl-string">"Dan"</span>,
+  <span class="hl-attr">year</span>: <span class="hl-string">2026</span>,
+  <span class="hl-attr">showBanner</span>: <span class="hl-keyword">true</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>By <span class="hl-bracket">{{</span> <span class="hl-var">author</span> <span class="hl-bracket">}}</span>, <span class="hl-bracket">{{</span> <span class="hl-var">year</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box warn">
+          <span class="icon">⚠️</span>
+          <p><strong>Important:</strong> The data must be wrapped in <code>({ ... })</code> — an object literal inside parentheses. This is how OrbLayout safely evaluates it.</p>
+        </div>
+      </div>
+
+      <!-- Variables -->
+      <div class="section" id="variables">
+        <h2>Using Variables</h2>
+        <p>Use <code>{{ variableName }}</code> anywhere in your page to inject data values.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Variable Syntax</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- In text content --&gt;</span>
+<span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+
+<span class="hl-comment">&lt;!-- In attributes --&gt;</span>
+<span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">imageUrl</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-attr">alt</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">imageAlt</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-comment">&lt;!-- In CSS --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">style</span>=<span class="hl-string">"color: <span class="hl-bracket">{{</span> <span class="hl-var">textColor</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>...<span class="hl-tag">&lt;/div&gt;</span>
+
+<span class="hl-comment">&lt;!-- Mixed with text --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span>Copyright &copy; <span class="hl-bracket">{{</span> <span class="hl-var">year</span> <span class="hl-bracket">}}</span> <span class="hl-bracket">{{</span> <span class="hl-var">author</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span></code></pre>
+        </div>
+
+        <p>Variables work everywhere — text content, HTML attributes, inline styles, even inside component props.</p>
+      </div>
+
+      <!-- Data Types -->
+      <div class="section" id="data-types">
+        <h2>Supported Data Types</h2>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">All Data Types</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-comment">// Strings</span>
+  <span class="hl-attr">name</span>: <span class="hl-string">"OrbLayout"</span>,
+
+  <span class="hl-comment">// Numbers</span>
+  <span class="hl-attr">version</span>: <span class="hl-string">1.2</span>,
+  <span class="hl-attr">count</span>: <span class="hl-string">42</span>,
+
+  <span class="hl-comment">// Booleans (for conditionals)</span>
+  <span class="hl-attr">showBanner</span>: <span class="hl-keyword">true</span>,
+  <span class="hl-attr">isAdmin</span>: <span class="hl-keyword">false</span>,
+
+  <span class="hl-comment">// Arrays (for loops)</span>
+  <span class="hl-attr">tags</span>: [<span class="hl-string">"html"</span>, <span class="hl-string">"css"</span>, <span class="hl-string">"static"</span>],
+
+  <span class="hl-comment">// Objects (for {{#with}} scoping)</span>
+  <span class="hl-attr">author</span>: {
+    <span class="hl-attr">name</span>: <span class="hl-string">"Dan"</span>,
+    <span class="hl-attr">twitter</span>: <span class="hl-string">"@dan"</span>
+  },
+
+  <span class="hl-comment">// Array of objects (for rich loops)</span>
+  <span class="hl-attr">features</span>: [
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Fast"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Zero runtime"</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Simple"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Just HTML"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span></code></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Type</th><th>Example</th><th>Used With</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>String</td><td><code>"Hello"</code></td><td><code>{{ variable }}</code></td></tr>
+              <tr><td>Number</td><td><code>42</code></td><td><code>{{ variable }}</code>, filters</td></tr>
+              <tr><td>Boolean</td><td><code>true / false</code></td><td><code>{{#if}}</code>, <code>{{#unless}}</code></td></tr>
+              <tr><td>Array</td><td><code>["a", "b"]</code></td><td><code>{{#each}}</code></td></tr>
+              <tr><td>Object</td><td><code>{ name: "Dan" }</code></td><td><code>{{#with}}</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Nested Objects -->
+      <div class="section" id="nested">
+        <h2>Nested Objects</h2>
+        <p>Access nested properties with <code>{{#with}}</code> blocks (covered in <a href="08-advanced.html">Lesson 8</a>):</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Nested Data Access</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">company</span>: {
+    <span class="hl-attr">name</span>: <span class="hl-string">"Acme Inc"</span>,
+    <span class="hl-attr">founded</span>: <span class="hl-string">2020</span>,
+    <span class="hl-attr">ceo</span>: <span class="hl-string">"Alice"</span>
+  }
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#with</span> <span class="hl-var">company</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;h2&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h2&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Founded: <span class="hl-bracket">{{</span> <span class="hl-var">founded</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>CEO: <span class="hl-bracket">{{</span> <span class="hl-var">ceo</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/with</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Built-in Variables -->
+      <div class="section" id="page-vars">
+        <h2>Built-in @page.* Variables</h2>
+        <p>OrbLayout provides built-in variables that are always available — no data block needed.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Variable</th><th>Output</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>{{ @page.filename }}</code></td><td><code>index</code></td><td>Current page filename (no extension)</td></tr>
+              <tr><td><code>{{ @page.date }}</code></td><td><code>2026-03-04</code></td><td>Today's date (YYYY-MM-DD)</td></tr>
+              <tr><td><code>{{ @page.year }}</code></td><td><code>2026</code></td><td>Current year</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Using @page Variables</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;footer&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>&copy; <span class="hl-bracket">{{</span> <span class="hl-var">@page.year</span> <span class="hl-bracket">}}</span> My Website<span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Last built: <span class="hl-bracket">{{</span> <span class="hl-var">@page.date</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Page: <span class="hl-bracket">{{</span> <span class="hl-var">@page.filename</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/footer&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Use case:</strong> <code>{{ @page.year }}</code> in a footer component means you never have to update the copyright year manually!</p>
+        </div>
+      </div>
+
+      <!-- Data Flow -->
+      <div class="section" id="flow">
+        <h2>Data Flow: Page → Layout → Component</h2>
+        <p>Understanding how data flows is crucial:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Data Flow</span>
+            <span class="code-lang">diagram</span>
+          </div>
+          <pre><code>   <span class="hl-tag">&lt;script data&gt;</span>  ← You define data here
+        │
+        ▼
+   Page (.orb)      ← Variables are resolved in the page
+        │
+        ▼
+   Layout (.layout) ← Variables flow into the layout too
+        │
+        ▼
+   Components (.orb) ← Components get data via props</code></pre>
+        </div>
+
+        <ol>
+          <li><strong>Data block</strong> defines the data object</li>
+          <li><strong>Page</strong> uses variables like <code>{{ title }}</code></li>
+          <li><strong>Layout</strong> also receives the data — <code>{{ title }}</code> works in layouts</li>
+          <li><strong>Components</strong> receive data through <strong>props only</strong> — they can't directly access page data</li>
+        </ol>
+
+        <div class="info-box note">
+          <span class="icon">📐</span>
+          <p><strong>Key rule:</strong> Components are isolated. To pass data to a component, use props: <code>&lt;use component="card" title="{{ title }}" /&gt;</code></p>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 4 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now understand:</p>
+        <ol>
+          <li>How to define data with <code>&lt;script data&gt;({ ... })&lt;/script&gt;</code></li>
+          <li>How to use variables with <code>{{ variableName }}</code></li>
+          <li>All supported data types: strings, numbers, booleans, arrays, objects</li>
+          <li>Built-in <code>@page.*</code> variables for metadata</li>
+          <li>How data flows from page → layout → components (via props)</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="03-components.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Components & Props</span>
+        </a>
+        <a href="05-loops.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Loops & Iteration</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7: Pipe Filters — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 07 of 10</div>
+        <h1>Pipe Filters</h1>
+        <p class="lesson-desc">Transform your data inline with the pipe syntax. Uppercase text, create URL slugs, format numbers, escape HTML, and more — all without writing JavaScript.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#syntax">The Pipe Syntax</a></li>
+          <li><a href="#all-filters">All 12 Built-in Filters</a></li>
+          <li><a href="#chaining">Filter Chaining</a></li>
+          <li><a href="#examples">Practical Examples</a></li>
+          <li><a href="#custom">Custom Filters (API)</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Pipe Syntax -->
+      <div class="section" id="syntax">
+        <h2>The Pipe Syntax</h2>
+        <p>Add a pipe <code>|</code> after a variable name to transform its value:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Pipe Syntax</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-bracket">{{</span> <span class="hl-var">variableName</span> | <span class="hl-keyword">filterName</span> <span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Example</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({ <span class="hl-attr">title</span>: <span class="hl-string">"hello world"</span> })
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">uppercase</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+<span class="hl-comment">&lt;!-- Output: &lt;h1&gt;HELLO WORLD&lt;/h1&gt; --&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- All 12 Filters -->
+      <div class="section" id="all-filters">
+        <h2>All 12 Built-in Filters</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Filter</th><th>Input</th><th>Output</th><th>What It Does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>uppercase</code></td>
+                <td><code>"hello world"</code></td>
+                <td><code>"HELLO WORLD"</code></td>
+                <td>Converts all characters to uppercase</td>
+              </tr>
+              <tr>
+                <td><code>lowercase</code></td>
+                <td><code>"HELLO"</code></td>
+                <td><code>"hello"</code></td>
+                <td>Converts all characters to lowercase</td>
+              </tr>
+              <tr>
+                <td><code>capitalize</code></td>
+                <td><code>"hello world"</code></td>
+                <td><code>"Hello world"</code></td>
+                <td>Capitalizes the first letter</td>
+              </tr>
+              <tr>
+                <td><code>trim</code></td>
+                <td><code>"  hello  "</code></td>
+                <td><code>"hello"</code></td>
+                <td>Removes leading/trailing whitespace</td>
+              </tr>
+              <tr>
+                <td><code>slugify</code></td>
+                <td><code>"Hello World!"</code></td>
+                <td><code>"hello-world"</code></td>
+                <td>URL-safe slug (lowercase, hyphens)</td>
+              </tr>
+              <tr>
+                <td><code>reverse</code></td>
+                <td><code>"hello"</code></td>
+                <td><code>"olleh"</code></td>
+                <td>Reverses the string</td>
+              </tr>
+              <tr>
+                <td><code>length</code></td>
+                <td><code>"hello"</code></td>
+                <td><code>5</code></td>
+                <td>Returns string/array length</td>
+              </tr>
+              <tr>
+                <td><code>json</code></td>
+                <td><code>{ a: 1 }</code></td>
+                <td><code>'{"a":1}'</code></td>
+                <td>JSON.stringify()</td>
+              </tr>
+              <tr>
+                <td><code>escape</code></td>
+                <td><code>"&lt;div&gt;"</code></td>
+                <td><code>"&amp;lt;div&amp;gt;"</code></td>
+                <td>HTML entity escaping</td>
+              </tr>
+              <tr>
+                <td><code>truncate</code></td>
+                <td><code>"A very long..."</code></td>
+                <td><code>"A very lo..."</code></td>
+                <td>Truncates to 100 chars with "..."</td>
+              </tr>
+              <tr>
+                <td><code>number</code></td>
+                <td><code>1234567</code></td>
+                <td><code>"1,234,567"</code></td>
+                <td>Locale-formatted number</td>
+              </tr>
+              <tr>
+                <td><code>encode</code></td>
+                <td><code>"hello world"</code></td>
+                <td><code>"hello%20world"</code></td>
+                <td>URI-encodes the string</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Text filters in action</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Text Filters</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({ <span class="hl-attr">title</span>: <span class="hl-string">"OrbLayout Is Amazing"</span> })
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">uppercase</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>     <span class="hl-comment">&lt;!-- ORBLAYOUT IS AMAZING --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">lowercase</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>       <span class="hl-comment">&lt;!-- orblayout is amazing --&gt;</span>
+<span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/posts/<span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">slugify</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>Link<span class="hl-tag">&lt;/a&gt;</span> <span class="hl-comment">&lt;!-- /posts/orblayout-is-amazing --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span>Length: <span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">length</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>   <span class="hl-comment">&lt;!-- 20 --&gt;</span></code></pre>
+        </div>
+
+        <h3>Number & encoding filters</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Number & Encoding</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">price</span>: <span class="hl-string">1299999</span>,
+  <span class="hl-attr">searchQuery</span>: <span class="hl-string">"hello world & more"</span>,
+  <span class="hl-attr">userInput</span>: <span class="hl-string">"&lt;script&gt;alert('xss')&lt;/script&gt;"</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;p&gt;</span>Price: $<span class="hl-bracket">{{</span> <span class="hl-var">price</span> | <span class="hl-keyword">number</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>                <span class="hl-comment">&lt;!-- $1,299,999 --&gt;</span>
+<span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/search?q=<span class="hl-bracket">{{</span> <span class="hl-var">searchQuery</span> | <span class="hl-keyword">encode</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>Search<span class="hl-tag">&lt;/a&gt;</span> <span class="hl-comment">&lt;!-- URL-safe --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">userInput</span> | <span class="hl-keyword">escape</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>                    <span class="hl-comment">&lt;!-- Safe from XSS --&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Chaining -->
+      <div class="section" id="chaining">
+        <h2>Filter Chaining</h2>
+        <p>Chain multiple filters together with additional pipes. They execute <strong>left to right</strong>:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Filter Chains</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- "  Hello World  " → "Hello World" → "HELLO WORLD" --&gt;</span>
+<span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">trim</span> | <span class="hl-keyword">uppercase</span> <span class="hl-bracket">}}</span>
+
+<span class="hl-comment">&lt;!-- "My Blog Post Title" → "my-blog-post-title" --&gt;</span>
+<span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">slugify</span> <span class="hl-bracket">}}</span>
+
+<span class="hl-comment">&lt;!-- "hello" → "Hello" → reverse → "olleH" --&gt;</span>
+<span class="hl-bracket">{{</span> <span class="hl-var">name</span> | <span class="hl-keyword">capitalize</span> | <span class="hl-keyword">reverse</span> <span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Think of pipes like a factory line:</strong> data enters from the left, gets transformed by each filter in sequence, and the final result is output.</p>
+        </div>
+      </div>
+
+      <!-- Practical Examples -->
+      <div class="section" id="examples">
+        <h2>Practical Examples</h2>
+
+        <h3>Blog post URL generation</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Blog Post Slugs</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">posts</span>: [
+    { <span class="hl-attr">title</span>: <span class="hl-string">"Getting Started with OrbLayout"</span> },
+    { <span class="hl-attr">title</span>: <span class="hl-string">"10 Tips for Better Static Sites"</span> },
+    { <span class="hl-attr">title</span>: <span class="hl-string">"Why Components Matter"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">posts</span><span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"/blog/<span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">slugify</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span>
+  <span class="hl-tag">&lt;/a&gt;</span>
+<span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span></code></pre>
+        </div>
+
+        <p><strong>Result:</strong></p>
+        <div class="result-preview">
+          <a href="#" style="display: block; color: #6c5ce7; margin-bottom: 0.25rem;">/blog/getting-started-with-orblayout</a>
+          <a href="#" style="display: block; color: #6c5ce7; margin-bottom: 0.25rem;">/blog/10-tips-for-better-static-sites</a>
+          <a href="#" style="display: block; color: #6c5ce7;">/blog/why-components-matter</a>
+        </div>
+
+        <h3>Safe user-generated content</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">XSS Prevention</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- Always escape user input to prevent XSS --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"comment"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">userComment</span> | <span class="hl-keyword">escape</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>Display formatting</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Formatting</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- Format large numbers --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span>Downloads: <span class="hl-bracket">{{</span> <span class="hl-var">downloads</span> | <span class="hl-keyword">number</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-comment">&lt;!-- 1500000 → "1,500,000" --&gt;</span>
+
+<span class="hl-comment">&lt;!-- Debug: see raw data --&gt;</span>
+<span class="hl-tag">&lt;pre&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">config</span> | <span class="hl-keyword">json</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/pre&gt;</span>
+<span class="hl-comment">&lt;!-- {"pagesDir":"pages","minify":false} --&gt;</span>
+
+<span class="hl-comment">&lt;!-- Truncate long text --&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">longDescription</span> | <span class="hl-keyword">truncate</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-comment">&lt;!-- "Lorem ipsum dolor sit amet..." (max 100 chars) --&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Custom Filters -->
+      <div class="section" id="custom">
+        <h2>Custom Filters (Programmatic API)</h2>
+        <p>Need a filter that doesn't exist? Register your own using the Node.js API:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">build.js</span>
+            <span class="code-lang">javascript</span>
+          </div>
+          <pre><code><span class="hl-keyword">const</span> { loadConfig, OrbCompiler, OrbBuilder } = <span class="hl-keyword">require</span>(<span class="hl-string">"orblayout"</span>);
+
+<span class="hl-keyword">const</span> config = loadConfig(process.cwd());
+<span class="hl-keyword">const</span> compiler = <span class="hl-keyword">new</span> OrbCompiler(config);
+
+<span class="hl-comment">// Register custom filters</span>
+compiler.registerFilter(<span class="hl-string">"shout"</span>, value =&gt; value + <span class="hl-string">"!!!"</span>);
+compiler.registerFilter(<span class="hl-string">"emoji"</span>, value =&gt; <span class="hl-string">"🔥 "</span> + value);
+compiler.registerFilter(<span class="hl-string">"currency"</span>, value =&gt; <span class="hl-string">"$"</span> + Number(value).toFixed(2));
+
+<span class="hl-comment">// Now use them in .orb files:</span>
+<span class="hl-comment">// {{ title | shout }}     → "Hello!!!"</span>
+<span class="hl-comment">// {{ name | emoji }}      → "🔥 Dan"</span>
+<span class="hl-comment">// {{ price | currency }}  → "$9.99"</span></code></pre>
+        </div>
+
+        <div class="info-box note">
+          <span class="icon">📐</span>
+          <p>Custom filters are covered in depth in <a href="09-cli-tooling.html">Lesson 9: CLI & Tooling</a>. This is a preview!</p>
+        </div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 7 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Use the pipe syntax: <code>{{ variable | filter }}</code></li>
+          <li>Apply any of the 12 built-in filters</li>
+          <li>Chain multiple filters: <code>{{ var | trim | uppercase }}</code></li>
+          <li>Know when to use <code>escape</code>, <code>slugify</code>, <code>number</code>, and <code>encode</code></li>
+          <li>Register custom filters via the API</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="06-conditionals.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Conditionals</span>
+        </a>
+        <a href="08-advanced.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Advanced Features</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

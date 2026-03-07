@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8: Advanced Features — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 08 of 10</div>
+        <h1>Advanced Features</h1>
+        <p class="lesson-desc">Unlock OrbLayout's full power with markdown blocks, {{#with}} scoping, partials, component imports, :class directives, and more.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#markdown">Markdown Blocks</a></li>
+          <li><a href="#with">{{#with}} Scoping</a></li>
+          <li><a href="#partials">Partials</a></li>
+          <li><a href="#class-directives">:class Directives</a></li>
+          <li><a href="#styles-advanced">Advanced Styles</a></li>
+          <li><a href="#combining">Combining Everything</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Markdown Blocks -->
+      <div class="section" id="markdown">
+        <h2>Markdown Blocks</h2>
+        <p>Write content in markdown directly inside your <code>.orb</code> files. OrbLayout converts it to HTML at build time.</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Input (.orb)</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;markdown&gt;</span>
+# Hello World
+
+This is **bold** and *italic*.
+
+- Item one
+- Item two
+- Item three
+
+[Visit OrbLayout](https://github.com
+/rukkit-official/orblayout)
+
+---
+
+Here's some `inline code`.
+<span class="hl-tag">&lt;/markdown&gt;</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Output (HTML)</span>
+              <span class="code-lang">html</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;h1&gt;</span>Hello World<span class="hl-tag">&lt;/h1&gt;</span>
+
+<span class="hl-tag">&lt;p&gt;</span>This is <span class="hl-tag">&lt;strong&gt;</span>bold<span class="hl-tag">&lt;/strong&gt;</span>
+and <span class="hl-tag">&lt;em&gt;</span>italic<span class="hl-tag">&lt;/em&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span>
+
+<span class="hl-tag">&lt;ul&gt;</span>
+  <span class="hl-tag">&lt;li&gt;</span>Item one<span class="hl-tag">&lt;/li&gt;</span>
+  <span class="hl-tag">&lt;li&gt;</span>Item two<span class="hl-tag">&lt;/li&gt;</span>
+  <span class="hl-tag">&lt;li&gt;</span>Item three<span class="hl-tag">&lt;/li&gt;</span>
+<span class="hl-tag">&lt;/ul&gt;</span>
+
+<span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"..."</span><span class="hl-tag">&gt;</span>Visit<span class="hl-tag">&lt;/a&gt;</span>
+
+<span class="hl-tag">&lt;hr&gt;</span>
+
+<span class="hl-tag">&lt;p&gt;</span>Here's <span class="hl-tag">&lt;code&gt;</span>inline<span class="hl-tag">&lt;/code&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <h3>Supported markdown syntax</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Markdown</th><th>HTML Output</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code># Heading</code></td><td><code>&lt;h1&gt;</code></td></tr>
+              <tr><td><code>## Heading</code></td><td><code>&lt;h2&gt;</code></td></tr>
+              <tr><td><code>### Heading</code></td><td><code>&lt;h3&gt;</code></td></tr>
+              <tr><td><code>**bold**</code></td><td><code>&lt;strong&gt;</code></td></tr>
+              <tr><td><code>*italic*</code></td><td><code>&lt;em&gt;</code></td></tr>
+              <tr><td><code>`code`</code></td><td><code>&lt;code&gt;</code></td></tr>
+              <tr><td><code>[text](url)</code></td><td><code>&lt;a href&gt;</code></td></tr>
+              <tr><td><code>![alt](src)</code></td><td><code>&lt;img&gt;</code></td></tr>
+              <tr><td><code>- item</code></td><td><code>&lt;ul&gt;&lt;li&gt;</code></td></tr>
+              <tr><td><code>---</code></td><td><code>&lt;hr&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Perfect for:</strong> Blog posts, documentation pages, changelog sections — anywhere you want to write content quickly without HTML tags.</p>
+        </div>
+      </div>
+
+      <!-- With Blocks -->
+      <div class="section" id="with">
+        <h2>{{#with}} — Scoping Variables</h2>
+        <p><code>{{#with}}</code> lets you "enter" a nested object so you can reference its properties directly.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Without {{#with}} — verbose</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- You'd need dot notation (which OrbLayout doesn't support) --&gt;</span>
+<span class="hl-comment">&lt;!-- So without {{#with}}, you can't access nested data easily --&gt;</span></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">With {{#with}} — clean!</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">author</span>: {
+    <span class="hl-attr">name</span>: <span class="hl-string">"Dan"</span>,
+    <span class="hl-attr">bio</span>: <span class="hl-string">"Full-stack developer & OrbLayout creator"</span>,
+    <span class="hl-attr">twitter</span>: <span class="hl-string">"@dan_dev"</span>,
+    <span class="hl-attr">avatar</span>: <span class="hl-string">"/assets/dan.jpg"</span>
+  }
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"author-card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">#with</span> <span class="hl-var">author</span><span class="hl-bracket">}}</span>
+    <span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">avatar</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-attr">alt</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">bio</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"https://twitter.com/<span class="hl-bracket">{{</span> <span class="hl-var">twitter</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>Follow<span class="hl-tag">&lt;/a&gt;</span>
+  <span class="hl-bracket">{{</span><span class="hl-keyword">/with</span><span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <p>Inside <code>{{#with author}}</code>, variables like <code>{{ name }}</code> automatically refer to <code>author.name</code>.</p>
+      </div>
+
+      <!-- Partials -->
+      <div class="section" id="partials">
+        <h2>Partials — Simple File Includes</h2>
+        <p>Partials let you include another <code>.orb</code> file as-is, <strong>without props</strong>. Think of it as a simple HTML include.</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">components/analytics.orb</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-comment">&lt;!-- Google Analytics snippet --&gt;</span>
+<span class="hl-tag">&lt;script</span> <span class="hl-attr">async</span>
+  <span class="hl-attr">src</span>=<span class="hl-string">"https://gtag..."</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/script&gt;</span>
+<span class="hl-tag">&lt;script&gt;</span>
+  window.dataLayer = ...
+<span class="hl-tag">&lt;/script&gt;</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">layouts/main.layout</span>
+              <span class="code-lang">.layout</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;head&gt;</span>
+  ...
+  <span class="hl-tag">&lt;use</span> <span class="hl-attr">partial</span>=<span class="hl-string">"analytics"</span> <span class="hl-tag">/&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <h3>Components vs Partials</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Feature</th><th>Component</th><th>Partial</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Syntax</td><td><code>&lt;use component="..." /&gt;</code></td><td><code>&lt;use partial="..." /&gt;</code></td></tr>
+              <tr><td>Props</td><td>✅ Yes — pass data via attributes</td><td>❌ No — inserted as-is</td></tr>
+              <tr><td>Use case</td><td>Dynamic UI blocks (cards, heroes)</td><td>Static snippets (analytics, meta tags)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- :class Directives -->
+      <div class="section" id="class-directives">
+        <h2>:class Directives</h2>
+        <p>Conditionally apply CSS classes based on data values. Similar to Vue.js's <code>:class</code> binding.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">:class Directive</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">isActive</span>: <span class="hl-keyword">true</span>,
+  <span class="hl-attr">isHidden</span>: <span class="hl-keyword">false</span>,
+  <span class="hl-attr">isDarkMode</span>: <span class="hl-keyword">true</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span>
+  <span class="hl-attr">:class</span>=<span class="hl-string">"{ active: isActive, hidden: isHidden, dark: isDarkMode }"</span><span class="hl-tag">&gt;</span>
+  ...
+<span class="hl-tag">&lt;/div&gt;</span>
+
+<span class="hl-comment">&lt;!-- Output: &lt;div class="card active dark"&gt; --&gt;</span></code></pre>
+        </div>
+
+        <p>Only classes with truthy conditions get applied. <code>hidden</code> doesn't appear because <code>isHidden</code> is <code>false</code>.</p>
+      </div>
+
+      <!-- Advanced Styles -->
+      <div class="section" id="styles-advanced">
+        <h2>Advanced Styles</h2>
+        <h3>Style deduplication</h3>
+        <p>If multiple components on a page have identical <code>&lt;style&gt;</code> blocks, OrbLayout only includes the CSS <strong>once</strong>:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Used 5 times on a page</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-comment">&lt;!-- components/card.orb --&gt;</span>
+<span class="hl-tag">&lt;style&gt;</span>
+.card { background: #fff; padding: 1rem; border-radius: 12px; }
+<span class="hl-tag">&lt;/style&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>...<span class="hl-tag">&lt;/div&gt;</span>
+
+<span class="hl-comment">&lt;!-- ✅ CSS is only included ONCE in &lt;head&gt;, not 5 times --&gt;</span></code></pre>
+        </div>
+
+        <h3>Styles from multiple components</h3>
+        <p>If your page uses <code>card.orb</code>, <code>badge.orb</code>, and <code>hero.orb</code> — each with their own <code>&lt;style&gt;</code> — all three CSS blocks are collected and injected into a single <code>&lt;style&gt;</code> tag in the page's <code>&lt;head&gt;</code>.</p>
+      </div>
+
+      <!-- Combining Everything -->
+      <div class="section" id="combining">
+        <h2>Combining Everything</h2>
+        <p>Here's a page that uses <em>every</em> advanced feature together:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/showcase.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">title</span>: <span class="hl-string">"Advanced Showcase"</span>,
+  <span class="hl-attr">showIntro</span>: <span class="hl-keyword">true</span>,
+  <span class="hl-attr">author</span>: {
+    <span class="hl-attr">name</span>: <span class="hl-string">"Dan"</span>,
+    <span class="hl-attr">role</span>: <span class="hl-string">"Creator"</span>
+  },
+  <span class="hl-attr">features</span>: [
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Markdown"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Write content faster"</span> },
+    { <span class="hl-attr">name</span>: <span class="hl-string">"Filters"</span>, <span class="hl-attr">desc</span>: <span class="hl-string">"Transform data inline"</span> }
+  ]
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;import</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span> <span class="hl-attr">as</span>=<span class="hl-string">"Card"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> | <span class="hl-keyword">uppercase</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+
+    <span class="hl-bracket">{{</span><span class="hl-keyword">#if</span> <span class="hl-var">showIntro</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;markdown&gt;</span>
+## Welcome!
+This page shows **every** advanced feature.
+      <span class="hl-tag">&lt;/markdown&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">/if</span><span class="hl-bracket">}}</span>
+
+    <span class="hl-bracket">{{</span><span class="hl-keyword">#with</span> <span class="hl-var">author</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;p&gt;</span>By <span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>, <span class="hl-bracket">{{</span> <span class="hl-var">role</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">/with</span><span class="hl-bracket">}}</span>
+
+    <span class="hl-bracket">{{</span><span class="hl-keyword">#each</span> <span class="hl-var">features</span><span class="hl-bracket">}}</span>
+      <span class="hl-tag">&lt;Card</span> <span class="hl-attr">title</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">name</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-attr">description</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">desc</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span>
+    <span class="hl-bracket">{{</span><span class="hl-keyword">/each</span><span class="hl-bracket">}}</span>
+
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">partial</span>=<span class="hl-string">"analytics"</span> <span class="hl-tag">/&gt;</span>
+
+    <span class="hl-tag">&lt;p&gt;</span>Built: <span class="hl-bracket">{{</span> <span class="hl-var">@page.date</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <p>This single page uses: data blocks, imports, layouts, filters, conditionals, markdown, {{#with}} scoping, loops, components, partials, and built-in @page variables.</p>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 8 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Write inline markdown with <code>&lt;markdown&gt;</code> blocks</li>
+          <li>Scope variables with <code>{{#with object}}</code></li>
+          <li>Include files with <code>&lt;use partial="..." /&gt;</code></li>
+          <li>Conditionally add CSS classes with <code>:class</code> directives</li>
+          <li>Understand how styles are deduplicated and collected</li>
+          <li>Combine all features together in a single page</li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="07-filters.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Pipe Filters</span>
+        </a>
+        <a href="09-cli-tooling.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">CLI & Dev Server</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

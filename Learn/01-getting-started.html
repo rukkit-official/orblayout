@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1: Getting Started — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html">
+      <span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 10%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <!-- Lesson Header -->
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 01 of 10</div>
+        <h1>Getting Started</h1>
+        <p class="lesson-desc">Install OrbLayout, create your first project, and understand how the build pipeline works. By the end of this lesson, you'll have a working static site.</p>
+      </div>
+
+      <!-- Table of Contents -->
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#what-is-orblayout">What is OrbLayout?</a></li>
+          <li><a href="#installation">Installation</a></li>
+          <li><a href="#scaffolding">Scaffolding a Project</a></li>
+          <li><a href="#project-structure">Project Structure</a></li>
+          <li><a href="#first-build">Your First Build</a></li>
+          <li><a href="#dev-server">Dev Server & Live Reload</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- Section: What is OrbLayout -->
+      <div class="section" id="what-is-orblayout">
+        <h2>What is OrbLayout?</h2>
+        <p>OrbLayout is a <strong>static site builder</strong> that lets you write HTML with superpowers. Think of it as a middle ground between hand-coding HTML and using a full JavaScript framework like React or Next.js.</p>
+        <p>With OrbLayout you get:</p>
+        <ul>
+          <li><strong>Layouts</strong> — Define the page shell (HTML boilerplate) once, reuse everywhere</li>
+          <li><strong>Components</strong> — Build reusable UI blocks like cards, headers, footers</li>
+          <li><strong>Props</strong> — Pass data to components just like React props</li>
+          <li><strong>Loops & Conditionals</strong> — Dynamically render lists and toggle content</li>
+          <li><strong>Filters</strong> — Transform data inline (uppercase, slugify, truncate, etc.)</li>
+          <li><strong>Zero runtime</strong> — Output is pure HTML. No JavaScript shipped to the browser</li>
+        </ul>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Why OrbLayout?</strong> If you need a website that's fast, SEO-friendly, and simple — but you're tired of copy-pasting the same header/footer into 50 HTML files — OrbLayout is for you.</p>
+        </div>
+      </div>
+
+      <!-- Section: Installation -->
+      <div class="section" id="installation">
+        <h2>Installation</h2>
+        <p>OrbLayout runs on <strong>Node.js 16+</strong>. Make sure you have Node installed first.</p>
+
+        <h3>Option A: npm (recommended)</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code># Install as a project dependency
+npm install orblayout
+
+# Or install globally
+npm install -g orblayout</code></pre>
+        </div>
+
+        <h3>Option B: Clone from GitHub</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>git clone https://github.com/rukkit-official/orblayout.git
+cd orblayout
+npm install</code></pre>
+        </div>
+
+        <h3>Verify installation</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>npx orb version
+# → OrbLayout v1.2.0</code></pre>
+        </div>
+
+        <div class="info-box note">
+          <span class="icon">📝</span>
+          <p>If installed globally, you can use <code>orb</code> directly instead of <code>npx orb</code>.</p>
+        </div>
+      </div>
+
+      <!-- Section: Scaffolding -->
+      <div class="section" id="scaffolding">
+        <h2>Scaffolding a Project</h2>
+        <p>The fastest way to start is with <code>orb init</code>. This creates the entire project structure for you.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>mkdir my-website
+cd my-website
+npx orb init</code></pre>
+        </div>
+
+        <p>This generates:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Output</span>
+            <span class="code-lang">text</span>
+          </div>
+          <pre><code>✓ Created orb.config.json
+✓ Created pages/index.orb
+✓ Created layouts/main.layout
+✓ Created components/header.orb
+✓ Created components/footer.orb
+
+  Project ready! Run 'orb dev' to start.</code></pre>
+        </div>
+      </div>
+
+      <!-- Section: Project Structure -->
+      <div class="section" id="project-structure">
+        <h2>Project Structure</h2>
+        <p>Every OrbLayout project follows this folder structure:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">File Tree</span>
+            <span class="code-lang">structure</span>
+          </div>
+          <pre><code>my-website/
+│
+├── 📄 orb.config.json     ← Project configuration
+│
+├── 📂 pages/               ← Your pages (.orb files)
+│   ├── index.orb           ← → dist/index.html
+│   ├── about.orb           ← → dist/about.html
+│   └── blog/
+│       └── post.orb        ← → dist/blog/post.html
+│
+├── 📂 components/           ← Reusable components
+│   ├── header.orb
+│   ├── footer.orb
+│   └── card.orb
+│
+├── 📂 layouts/              ← Page layout templates
+│   └── main.layout
+│
+├── 📂 assets/               ← Static files (images, CSS)
+│   ├── style.css
+│   └── logo.png
+│
+└── 📂 dist/                 ← Build output (auto-generated)
+    ├── index.html
+    └── about.html</code></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Folder</th>
+                <th>File Type</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pages/</code></td>
+                <td><code>.orb</code></td>
+                <td>Each file becomes an HTML page in <code>dist/</code></td>
+              </tr>
+              <tr>
+                <td><code>components/</code></td>
+                <td><code>.orb</code></td>
+                <td>Reusable UI blocks referenced by pages/layouts</td>
+              </tr>
+              <tr>
+                <td><code>layouts/</code></td>
+                <td><code>.layout</code></td>
+                <td>Page skeletons (HTML boilerplate)</td>
+              </tr>
+              <tr>
+                <td><code>assets/</code></td>
+                <td>any</td>
+                <td>Static files copied as-is to <code>dist/assets/</code></td>
+              </tr>
+              <tr>
+                <td><code>dist/</code></td>
+                <td><code>.html</code></td>
+                <td>Final output — pure HTML, ready to deploy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section: First Build -->
+      <div class="section" id="first-build">
+        <h2>Your First Build</h2>
+        <p>Let's build the site and see the output.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>npx orb build</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Output</span>
+            <span class="code-lang">text</span>
+          </div>
+          <pre><code>  ╔═══════════════════════════════════════╗
+  ║     ◉  O r b L a y o u t  v1.2.0    ║
+  ║     Static Site Builder               ║
+  ╚═══════════════════════════════════════╝
+  
+  Building pages...
+
+  ✓ index.orb → index.html
+  ✓ about.orb → about.html
+
+  Done! 2 page(s) compiled in 25ms
+  Output: dist/</code></pre>
+        </div>
+
+        <p>Open <code>dist/index.html</code> in your browser — that's your compiled page!</p>
+
+        <h3>Build with minification</h3>
+        <p>For production, add <code>--minify</code> to compress the HTML output:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>npx orb build --minify</code></pre>
+        </div>
+      </div>
+
+      <!-- Section: Dev Server -->
+      <div class="section" id="dev-server">
+        <h2>Dev Server & Live Reload</h2>
+        <p>During development, use the dev server for instant feedback:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>npx orb dev</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Output</span>
+            <span class="code-lang">text</span>
+          </div>
+          <pre><code>  ◉ OrbLayout Dev Server
+  
+  Local: http://localhost:3000
+  
+  Watching for changes...
+  [SSE] Live reload enabled</code></pre>
+        </div>
+
+        <p>The dev server:</p>
+        <ul>
+          <li><strong>Watches</strong> all <code>.orb</code> and <code>.layout</code> files for changes</li>
+          <li><strong>Rebuilds</strong> automatically when you save</li>
+          <li><strong>Reloads</strong> your browser via SSE (Server-Sent Events) — no browser extension needed</li>
+          <li><strong>Serves</strong> clean URLs (<code>/about</code> instead of <code>/about.html</code>)</li>
+        </ul>
+
+        <h3>Custom port</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Terminal</span>
+            <span class="code-lang">bash</span>
+          </div>
+          <pre><code>npx orb dev --port 8080</code></pre>
+        </div>
+
+        <div class="info-box tip">
+          <span class="icon">⚡</span>
+          <p><strong>Hot tip:</strong> Keep <code>orb dev</code> running in one terminal tab while you edit files. Your browser will auto-refresh every time you save!</p>
+        </div>
+      </div>
+
+      <!-- Section: How It Works -->
+      <div class="section" id="how-it-works">
+        <h2>How It Works</h2>
+        <p>OrbLayout's build pipeline is simple:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Pipeline</span>
+            <span class="code-lang">flow</span>
+          </div>
+          <pre><code>   .orb page file
+        │
+        ▼
+   ┌──────────┐
+   │  Parser   │ ← Extracts layout, components, data, loops, etc.
+   └────┬─────┘
+        ▼
+   ┌──────────┐
+   │ Compiler  │ ← Resolves everything into pure HTML
+   └────┬─────┘
+        ▼
+   ┌──────────┐
+   │ Builder   │ ← Writes .html files to dist/
+   └──────────┘
+        │
+        ▼
+   Pure .html file</code></pre>
+        </div>
+
+        <p>The key insight: <strong>everything happens at build time</strong>. Your visitors receive plain HTML files. No JavaScript framework loads, no API calls fire, no client-side rendering happens. It's just HTML.</p>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 1 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">Before moving on, make sure you can:</p>
+        <ol>
+          <li>Install OrbLayout via <code>npm install orblayout</code></li>
+          <li>Scaffold a project with <code>npx orb init</code></li>
+          <li>Build the site with <code>npx orb build</code></li>
+          <li>Start the dev server with <code>npx orb dev</code></li>
+          <li>Open <code>dist/index.html</code> in a browser and see your page</li>
+        </ol>
+      </div>
+
+      <!-- Lesson Navigation -->
+      <div class="lesson-nav">
+        <a href="index.html">
+          <span class="nav-label">← Back</span>
+          <span class="nav-title">Course Home</span>
+        </a>
+        <a href="02-layouts.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Layouts & Page Structure</span>
+        </a>
+      </div>
+
+    </div>
+
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbLayout — The Lightweight Static Site Builder</title>
+  <meta name="description" content="Build static sites with layouts, components, and props. Pure HTML. Zero runtime. Blazing fast.">
+  <meta name="keywords" content="static site generator, html, components, layouts, orblayout, ssg">
+  <meta property="og:title" content="OrbLayout — Static Site Builder">
+  <meta property="og:description" content="Pure HTML components, layouts, and props. Zero runtime. Blazing fast.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◉</text></svg>">
+  <style>
+    /* ─── Reset & Base ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #6c5ce7;
+      --primary-dark: #5a4bd1;
+      --primary-light: #a29bfe;
+      --accent: #00cec9;
+      --accent-dark: #00b5b0;
+      --bg: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a28;
+      --text: #e8e8f0;
+      --text-dim: #8888aa;
+      --text-bright: #ffffff;
+      --border: #2a2a3e;
+      --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+      --glow-primary: 0 0 60px rgba(108, 92, 231, 0.3);
+      --glow-accent: 0 0 60px rgba(0, 206, 201, 0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--primary-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ─── Animated Background ───────────────────────── */
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(108, 92, 231, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108, 92, 231, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-glow {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      filter: blur(150px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-glow-1 { top: -200px; right: -200px; background: var(--primary); }
+    .bg-glow-2 { bottom: -200px; left: -200px; background: var(--accent); }
+
+    /* ─── Nav ───────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    nav .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    nav .logo .orb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      background: var(--gradient);
+      border-radius: 50%;
+      font-size: 0.9rem;
+    }
+    nav .nav-links { display: flex; gap: 2rem; align-items: center; }
+    nav .nav-links a { color: var(--text-dim); font-size: 0.9rem; font-weight: 500; }
+    nav .nav-links a:hover { color: var(--text-bright); }
+    nav .nav-cta {
+      background: var(--gradient);
+      color: white !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    nav .nav-cta:hover { transform: translateY(-1px); box-shadow: var(--glow-primary); }
+
+    /* ─── Hero ──────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(108, 92, 231, 0.15);
+      border: 1px solid rgba(108, 92, 231, 0.3);
+      color: var(--primary-light);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+    .hero-badge .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, var(--primary-light) 50%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 3rem;
+      line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 40px rgba(108, 92, 231, 0.5); color: white; }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--primary); box-shadow: var(--glow-primary); color: var(--text); }
+
+    .hero-install {
+      margin-top: 3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+    .hero-install .dollar { color: var(--text-dim); }
+    .hero-install .copy-btn {
+      background: rgba(108, 92, 231, 0.2);
+      border: none;
+      color: var(--primary-light);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+    .hero-install .copy-btn:hover { background: rgba(108, 92, 231, 0.4); }
+
+    /* ─── Section ───────────────────────────────────── */
+    section { position: relative; z-index: 1; padding: 6rem 0; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--text-bright);
+    }
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── Features Grid ─────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: var(--glow-primary);
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-bright);
+    }
+    .feature-card p { color: var(--text-dim); font-size: 0.95rem; }
+
+    /* ─── Code Demo ─────────────────────────────────── */
+    .code-section { padding: 6rem 0; }
+    .code-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .code-demo { grid-template-columns: 1fr; }
+    }
+    .code-block {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-dot-r { background: #ff5f56; }
+    .code-dot-y { background: #ffbd2e; }
+    .code-dot-g { background: #27c93f; }
+    .code-header span { margin-left: auto; font-family: monospace; }
+    pre {
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    .code-tag { color: #e06c75; }
+    .code-attr { color: #d19a66; }
+    .code-str { color: #98c379; }
+    .code-var { color: #c678dd; }
+    .code-cmt { color: #5c6370; font-style: italic; }
+    .code-kw { color: #c678dd; }
+    .code-fn { color: #61afef; }
+
+    /* ─── How It Works ──────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      counter-reset: step;
+    }
+    .step {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      counter-increment: step;
+    }
+    .step::before {
+      content: counter(step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px; height: 40px;
+      background: var(--gradient);
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+    .step h3 { font-weight: 700; margin-bottom: 0.5rem; color: var(--text-bright); }
+    .step p { color: var(--text-dim); font-size: 0.95rem; }
+
+    /* ─── Comparison Table ──────────────────────────── */
+    .comparison {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .comparison table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    .comparison th {
+      text-align: left;
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+    .comparison td {
+      padding: 0.875rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      color: var(--text-dim);
+    }
+    .comparison tr:last-child td { border-bottom: none; }
+    .comparison td:first-child { color: var(--text); font-weight: 500; }
+    .check { color: #27c93f; font-weight: bold; }
+    .cross { color: #ff5f56; }
+    .orb-col { background: rgba(108, 92, 231, 0.08) !important; color: var(--accent) !important; font-weight: 600 !important; }
+
+    /* ─── Syntax Showcase ───────────────────────────── */
+    .syntax-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    .syntax-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .syntax-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .syntax-card code {
+      display: block;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--text-dim);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* ─── CLI Section ───────────────────────────────── */
+    .cli-commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .cli-cmd {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .cli-cmd .cmd {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .cli-cmd .cmd .dollar {color: var(--text-dim); }
+    .cli-cmd p { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* ─── CTA ───────────────────────────────────────── */
+    .cta {
+      position: relative;
+      z-index: 1;
+      padding: 8rem 0;
+      text-align: center;
+    }
+    .cta-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent 0%, var(--primary) 10%, transparent 20%);
+      animation: rotate 8s linear infinite;
+      opacity: 0.05;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--text-bright);
+      position: relative;
+    }
+    .cta p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    /* ─── Footer ────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
+    }
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .footer-left { display: flex; align-items: center; gap: 0.75rem; }
+    footer .footer-orb {
+      width: 28px; height: 28px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    footer p { color: var(--text-dim); font-size: 0.85rem; }
+    footer .footer-links { display: flex; gap: 1.5rem; }
+    footer .footer-links a { color: var(--text-dim); font-size: 0.85rem; }
+
+    /* ─── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav .nav-links a:not(.nav-cta) { display: none; }
+      .hero { padding-top: 6rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .syntax-grid { grid-template-columns: 1fr; }
+      .comparison { overflow-x: auto; }
+      .comparison table { min-width: 600px; }
+      .hero-install { font-size: 0.8rem; }
+    }
+
+    /* ─── Animations ────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate { animation: fadeUp 0.6s ease-out both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ─── Navigation ──────────────────────────────────── -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo">
+      <span class="orb">◉</span>
+      OrbLayout
+    </a>
+    <div class="nav-links">
+      <a href="/Learn">Learn OrbLayout</a>
+      <a href="#features">Features</a>
+      <a href="#syntax">Syntax</a>
+      <a href="#cli">CLI</a>
+      <a href="#compare">Compare</a>
+      <a href="https://github.com/rukkit-official/orblayout" class="nav-cta" target="_blank">★ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Hero ────────────────────────────────────────── -->
+<section class="hero">
+  <div>
+    <div class="hero-badge animate">
+      <span class="dot"></span>
+      v1.2 — Now with Filters, Markdown, and more
+    </div>
+    <h1 class="animate delay-1">Build static sites<br>like it's the future.</h1>
+    <p class="animate delay-2">
+      Components, layouts, loops, conditionals — all the power of modern frameworks,
+      compiled to <strong style="color: var(--text-bright);">pure static HTML</strong>.
+      Zero runtime. Zero JavaScript. Just HTML.
+    </p>
+    <div class="hero-actions animate delay-3">
+      <a href="https://github.com/rukkit-official/orblayout" class="btn btn-primary" target="_blank">
+        Get Started →
+      </a>
+      <a href="#features" class="btn btn-secondary">
+        See Features
+      </a>
+    </div>
+    <div class="hero-install animate delay-4">
+      <span class="dollar">$</span>
+      npm install orblayout
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('npm install orblayout'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Features ────────────────────────────────────── -->
+<section id="features">
+  <div class="container">
+    <span class="section-label">Features</span>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-desc">OrbLayout gives you modern component architecture without the bloat of JavaScript frameworks.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(108, 92, 231, 0.15); color: #6c5ce7;">🧩</div>
+        <h3>Component System</h3>
+        <p>Create reusable HTML components with props. Nest them infinitely. Import them with custom aliases.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(0, 206, 201, 0.15); color: #00cec9;">📐</div>
+        <h3>Layout Engine</h3>
+        <p>Define page layouts once, reuse everywhere. Named slots let you inject content into multiple areas.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(253, 203, 110, 0.15); color: #fdcb6e;">🔄</div>
+        <h3>Loops & Conditionals</h3>
+        <p>{{#each}} for iteration, {{#if}}/{{#unless}} for conditionals. Built-in @index, @first, @last helpers.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(225, 112, 85, 0.15); color: #e17055;">⚡</div>
+        <h3>Pipe Filters</h3>
+        <p>Transform data with {{ title | uppercase }}, {{ name | slugify }}, {{ text | truncate }} and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(0, 184, 148, 0.15); color: #00b894;">📝</div>
+        <h3>Markdown Blocks</h3>
+        <p>Write &lt;markdown&gt; blocks right in your .orb files. Headers, bold, links, lists — auto-converted to HTML.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(162, 155, 254, 0.15); color: #a29bfe;">🔥</div>
+        <h3>Live Reload Dev Server</h3>
+        <p>Built-in dev server with SSE-based live reload. Edit a file, see changes instantly. No config needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(116, 185, 255, 0.15); color: #74b9ff;">🎨</div>
+        <h3>Scoped Styles</h3>
+        <p>Add &lt;style&gt; blocks in components. Styles are auto-collected and injected into the page &lt;head&gt;.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(255, 118, 117, 0.15); color: #ff7675;">🚀</div>
+        <h3>Zero Runtime</h3>
+        <p>Output is pure, clean HTML. No JavaScript bundle. No hydration. Just static files ready to deploy anywhere.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(129, 236, 236, 0.15); color: #81ecec;">⏱</div>
+        <h3>Build in Milliseconds</h3>
+        <p>Compile hundreds of pages in under 100ms. No Webpack, no Vite, no Rollup. Just Node.js doing its thing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Code Demo ───────────────────────────────────── -->
+<section class="code-section" id="syntax">
+  <div class="container">
+    <span class="section-label">See it in action</span>
+    <h2 class="section-title">Familiar syntax.<br>Powerful output.</h2>
+    <p class="section-desc">Write .orb files that look like HTML. The compiler handles the rest.</p>
+
+    <div class="code-demo">
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dot code-dot-r"></div>
+          <div class="code-dot code-dot-y"></div>
+          <div class="code-dot code-dot-g"></div>
+          <span>pages/index.orb</span>
+        </div>
+        <pre><span class="code-cmt">&lt;!-- Define page data --&gt;</span>
+<span class="code-tag">&lt;script</span> <span class="code-attr">data</span><span class="code-tag">&gt;</span>
+({
+  <span class="code-attr">title</span>: <span class="code-str">"Home"</span>,
+  <span class="code-attr">features</span>: [<span class="code-str">"Fast"</span>, <span class="code-str">"Simple"</span>, <span class="code-str">"Powerful"</span>]
+})
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-cmt">&lt;!-- Use a layout --&gt;</span>
+<span class="code-tag">&lt;layout</span> <span class="code-attr">src</span>=<span class="code-str">"main.layout"</span><span class="code-tag">&gt;</span>
+  <span class="code-tag">&lt;content&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>Welcome to <span class="code-var">{{ title }}</span><span class="code-tag">&lt;/h1&gt;</span>
+
+    <span class="code-cmt">&lt;!-- Use a component --&gt;</span>
+    <span class="code-tag">&lt;use</span> <span class="code-attr">component</span>=<span class="code-str">"hero"</span>
+      <span class="code-attr">heading</span>=<span class="code-str">"Hello World"</span> <span class="code-tag">/&gt;</span>
+
+    <span class="code-cmt">&lt;!-- Loop over data --&gt;</span>
+    <span class="code-var">{{#each features}}</span>
+      <span class="code-tag">&lt;li&gt;</span><span class="code-var">{{ this }}</span><span class="code-tag">&lt;/li&gt;</span>
+    <span class="code-var">{{/each}}</span>
+  <span class="code-tag">&lt;/content&gt;</span>
+<span class="code-tag">&lt;/layout&gt;</span></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dot code-dot-r"></div>
+          <div class="code-dot code-dot-y"></div>
+          <div class="code-dot code-dot-g"></div>
+          <span>dist/index.html ✓</span>
+        </div>
+        <pre><span class="code-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="code-tag">&lt;html&gt;</span>
+<span class="code-tag">&lt;head&gt;</span>
+  <span class="code-tag">&lt;title&gt;</span>Home<span class="code-tag">&lt;/title&gt;</span>
+<span class="code-tag">&lt;/head&gt;</span>
+<span class="code-tag">&lt;body&gt;</span>
+
+  <span class="code-cmt">&lt;!-- header component rendered --&gt;</span>
+  <span class="code-tag">&lt;header&gt;</span>...<span class="code-tag">&lt;/header&gt;</span>
+
+  <span class="code-tag">&lt;main&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>Welcome to Home<span class="code-tag">&lt;/h1&gt;</span>
+
+    <span class="code-cmt">&lt;!-- hero component inline --&gt;</span>
+    <span class="code-tag">&lt;section&gt;</span>Hello World<span class="code-tag">&lt;/section&gt;</span>
+
+    <span class="code-cmt">&lt;!-- each loop expanded --&gt;</span>
+    <span class="code-tag">&lt;li&gt;</span>Fast<span class="code-tag">&lt;/li&gt;</span>
+    <span class="code-tag">&lt;li&gt;</span>Simple<span class="code-tag">&lt;/li&gt;</span>
+    <span class="code-tag">&lt;li&gt;</span>Powerful<span class="code-tag">&lt;/li&gt;</span>
+  <span class="code-tag">&lt;/main&gt;</span>
+
+  <span class="code-cmt">&lt;!-- footer component rendered --&gt;</span>
+  <span class="code-tag">&lt;footer&gt;</span>...<span class="code-tag">&lt;/footer&gt;</span>
+
+<span class="code-tag">&lt;/body&gt;</span>
+<span class="code-tag">&lt;/html&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Syntax Showcase ─────────────────────────────── -->
+<section>
+  <div class="container">
+    <span class="section-label">Syntax Reference</span>
+    <h2 class="section-title">Complete language at a glance.</h2>
+    <p class="section-desc">All the syntax features available in OrbLayout v1.2.</p>
+
+    <div class="syntax-grid">
+      <div class="syntax-card">
+        <h3>📐 Layout</h3>
+        <code>&lt;layout src="main.layout"&gt;
+  &lt;content&gt;
+    &lt;h1&gt;Page content here&lt;/h1&gt;
+  &lt;/content&gt;
+&lt;/layout&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>🧩 Component</h3>
+        <code>&lt;use component="card"
+   title="Hello"
+   description="World" /&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>📦 Import</h3>
+        <code>&lt;import component="card" as="Card" /&gt;
+&lt;Card title="Hey" /&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>🔁 Loop</h3>
+        <code>{{#each items}}
+  &lt;li&gt;{{ @number }}. {{ this }}&lt;/li&gt;
+{{/each}}</code>
+      </div>
+      <div class="syntax-card">
+        <h3>❓ Conditional</h3>
+        <code>{{#if loggedIn}}
+  &lt;button&gt;Logout&lt;/button&gt;
+{{else}}
+  &lt;button&gt;Login&lt;/button&gt;
+{{/if}}</code>
+      </div>
+      <div class="syntax-card">
+        <h3>🔧 Filters</h3>
+        <code>{{ title | uppercase }}
+{{ name | slugify }}
+{{ text | capitalize | trim }}</code>
+      </div>
+      <div class="syntax-card">
+        <h3>📊 Data Block</h3>
+        <code>&lt;script data&gt;
+({
+  title: "My Page",
+  items: ["A", "B", "C"],
+  showNav: true
+})
+&lt;/script&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>📝 Markdown</h3>
+        <code>&lt;markdown&gt;
+# Hello World
+
+This is **bold** and *italic*.
+[Link](https://example.com)
+&lt;/markdown&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>📌 Named Slots</h3>
+        <code>&lt;layout src="docs.layout"&gt;
+  &lt;content&gt;Main content&lt;/content&gt;
+  &lt;slot:sidebar&gt;
+    Side navigation
+  &lt;/slot:sidebar&gt;
+&lt;/layout&gt;</code>
+      </div>
+      <div class="syntax-card">
+        <h3>🔍 With Scope</h3>
+        <code>{{#with author}}
+  &lt;h3&gt;{{ name }}&lt;/h3&gt;
+  &lt;p&gt;{{ bio }}&lt;/p&gt;
+{{/with}}</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── How It Works ────────────────────────────────── -->
+<section>
+  <div class="container">
+    <span class="section-label">How It Works</span>
+    <h2 class="section-title">Simple build pipeline.</h2>
+    <p class="section-desc">From .orb files to static HTML in milliseconds.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h3>Write .orb files</h3>
+        <p>Create pages, components, and layouts using familiar HTML enhanced with OrbLayout syntax.</p>
+      </div>
+      <div class="step">
+        <h3>Run orb build</h3>
+        <p>The compiler reads pages, resolves layouts, injects components, processes loops & conditionals.</p>
+      </div>
+      <div class="step">
+        <h3>Get pure HTML</h3>
+        <p>Output is clean, static HTML files. No JavaScript. No runtime. Deploy anywhere instantly.</p>
+      </div>
+      <div class="step">
+        <h3>Deploy anywhere</h3>
+        <p>GitHub Pages, Netlify, Vercel, S3, or any web server. Just upload the dist/ folder.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CLI ──────────────────────────────────────────── -->
+<section id="cli">
+  <div class="container">
+    <span class="section-label">CLI</span>
+    <h2 class="section-title">Powerful CLI. Zero config.</h2>
+    <p class="section-desc">Everything you need from a single orb command.</p>
+
+    <div class="cli-commands">
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npm install orblayout</div>
+        <p>Install OrbLayout globally or as a project dependency.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb init</div>
+        <p>Scaffold a new project with pages, components, layouts, and config.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb build</div>
+        <p>Compile all .orb pages to static HTML in the dist/ folder.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb build --minify</div>
+        <p>Build with HTML/CSS/JS minification for production deployment.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb dev</div>
+        <p>Start dev server with live reload at localhost:3000.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb dev --port 8080</div>
+        <p>Use a custom port for the development server.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb clean</div>
+        <p>Remove the dist/ output folder for a clean rebuild.</p>
+      </div>
+      <div class="cli-cmd">
+        <div class="cmd"><span class="dollar">$ </span>npx orb help</div>
+        <p>Show all available commands and options.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── NPM Usage ───────────────────────────────────── -->
+<section>
+  <div class="container">
+    <span class="section-label">Programmatic API</span>
+    <h2 class="section-title">Use as a library too.</h2>
+    <p class="section-desc">Import OrbLayout into your own Node.js scripts for custom build pipelines.</p>
+
+    <div class="code-block" style="max-width: 700px;">
+      <div class="code-header">
+        <div class="code-dot code-dot-r"></div>
+        <div class="code-dot code-dot-y"></div>
+        <div class="code-dot code-dot-g"></div>
+        <span>build-script.js</span>
+      </div>
+      <pre><span class="code-kw">const</span> { loadConfig, OrbBuilder, OrbCompiler } = <span class="code-fn">require</span>(<span class="code-str">"orblayout"</span>);
+
+<span class="code-cmt">// Load config from current directory</span>
+<span class="code-kw">const</span> config = <span class="code-fn">loadConfig</span>(process.cwd());
+
+<span class="code-cmt">// Option 1: Build all pages</span>
+<span class="code-kw">const</span> builder = <span class="code-kw">new</span> <span class="code-fn">OrbBuilder</span>(config);
+builder.<span class="code-fn">build</span>().then(result => {
+  console.log(<span class="code-str">`Built ${result.pages} pages in ${result.time}ms`</span>);
+});
+
+<span class="code-cmt">// Option 2: Compile a single page</span>
+<span class="code-kw">const</span> compiler = <span class="code-kw">new</span> <span class="code-fn">OrbCompiler</span>(config);
+
+<span class="code-cmt">// Register custom filters</span>
+compiler.<span class="code-fn">registerFilter</span>(<span class="code-str">"shout"</span>, v => v + <span class="code-str">"!!!"</span>);
+
+<span class="code-kw">const</span> html = compiler.<span class="code-fn">compilePage</span>(<span class="code-str">"pages/index.orb"</span>);
+console.log(html);</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Comparison ──────────────────────────────────── -->
+<section id="compare">
+  <div class="container">
+    <span class="section-label">Comparison</span>
+    <h2 class="section-title">Why OrbLayout?</h2>
+    <p class="section-desc">All the DX of modern frameworks. None of the bloat.</p>
+
+    <div class="comparison">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="orb-col">OrbLayout</th>
+            <th>Plain HTML</th>
+            <th>React / Next</th>
+            <th>Hugo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Components</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Layouts</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Props</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td>Partial</td>
+          </tr>
+          <tr>
+            <td>Loops & Conditionals</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Pipe Filters</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td>Partial</td>
+          </tr>
+          <tr>
+            <td>Markdown</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td>Plugin</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Zero JS Runtime</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>No Build Toolchain</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Learning Curve</td>
+            <td class="orb-col"><strong style="color:#27c93f">Low</strong></td>
+            <td>None</td>
+            <td><strong style="color:#ff5f56">High</strong></td>
+            <td><strong style="color:#ffbd2e">Med</strong></td>
+          </tr>
+          <tr>
+            <td>Live Reload</td>
+            <td class="orb-col"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Output Size</td>
+            <td class="orb-col"><strong style="color:#27c93f">Tiny</strong></td>
+            <td>Tiny</td>
+            <td><strong style="color:#ff5f56">Large</strong></td>
+            <td>Tiny</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Filters Reference ───────────────────────────── -->
+<section>
+  <div class="container">
+    <span class="section-label">Built-in Filters</span>
+    <h2 class="section-title">Transform data inline.</h2>
+    <p class="section-desc">Use pipe syntax to transform variables on the fly.</p>
+
+    <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">uppercase</h3>
+        <p>{{ title | uppercase }} → "HELLO"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">lowercase</h3>
+        <p>{{ title | lowercase }} → "hello"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">capitalize</h3>
+        <p>{{ name | capitalize }} → "Hello"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">slugify</h3>
+        <p>{{ title | slugify }} → "hello-world"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">truncate</h3>
+        <p>{{ text | truncate }} → "Hello wo..."</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">escape</h3>
+        <p>{{ html | escape }} → "&amp;lt;div&amp;gt;"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">json</h3>
+        <p>{{ data | json }} → '{"key":"val"}'</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">reverse</h3>
+        <p>{{ text | reverse }} → "olleH"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">number</h3>
+        <p>{{ price | number }} → "1,234,567"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">encode</h3>
+        <p>{{ url | encode }} → "hello%20world"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">trim</h3>
+        <p>{{ text | trim }} → "hello"</p>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-family: monospace; color: var(--accent);">length</h3>
+        <p>{{ items | length }} → "5"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ──────────────────────────────────────────── -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Start building with OrbLayout today.</h2>
+      <p>Install in seconds. Deploy in minutes. No framework fatigue.</p>
+      <div class="hero-actions" style="position: relative;">
+        <a href="https://github.com/rukkit-official/orblayout" class="btn btn-primary" target="_blank">
+          ★ Star on GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/orblayout" class="btn btn-secondary" target="_blank">
+          View on npm
+        </a>
+      </div>
+      <div class="hero-install" style="margin-top: 2rem; position: relative;">
+        <span class="dollar">$</span>
+        npm install orblayout
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('npm install orblayout'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ──────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-left">
+      <div class="footer-orb">◉</div>
+      <p>&copy; 2026 OrbLayout. MIT License.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/rukkit-official/orblayout">GitHub</a>
+      <a href="https://www.npmjs.com/package/orblayout">npm</a>
+      <a href="https://github.com/rukkit-official/orblayout/issues">Issues</a>
+      <a href="https://github.com/rukkit-official/orblayout/blob/main/README.md">Docs</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

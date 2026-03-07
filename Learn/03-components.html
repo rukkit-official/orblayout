@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3: Components & Props — OrbLayout Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="logo" href="index.html"><span class="orb">◉</span> OrbLayout <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">Learn</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Course</a></li>
+      <li><a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></li>
+    </ul>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill" style="width: 30%;"></div></div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="lesson-header">
+        <div class="lesson-num">Lesson 03 of 10</div>
+        <h1>Components & Props</h1>
+        <p class="lesson-desc">Components are the heart of OrbLayout. Build reusable UI blocks, customize them with props, nest them inside each other, and add component-scoped styles.</p>
+      </div>
+
+      <div class="toc">
+        <h4>In This Lesson</h4>
+        <ol>
+          <li><a href="#what">What Are Components?</a></li>
+          <li><a href="#creating">Creating a Component</a></li>
+          <li><a href="#using">Using Components</a></li>
+          <li><a href="#props">Props — Passing Data</a></li>
+          <li><a href="#nesting">Nested Components</a></li>
+          <li><a href="#styles">Component Styles</a></li>
+          <li><a href="#imports">Imports & Aliases</a></li>
+          <li><a href="#best-practices">Best Practices</a></li>
+          <li><a href="#checkpoint">Checkpoint</a></li>
+        </ol>
+      </div>
+
+      <!-- What Are Components -->
+      <div class="section" id="what">
+        <h2>What Are Components?</h2>
+        <p>A component is a <strong>reusable HTML block</strong> that you define once and use anywhere. Think of it like a rubber stamp — you design the stamp, then stamp it wherever you need it.</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Without Components</span>
+              <span class="code-lang">html</span>
+            </div>
+            <pre><code><span class="hl-comment">&lt;!-- Copy-paste everywhere --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span>Feature A<span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Description A<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span>Feature B<span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Description B<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span>Feature C<span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span>Description C<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">With Components</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-comment">&lt;!-- Write once, use anywhere --&gt;</span>
+<span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+  <span class="hl-attr">title</span>=<span class="hl-string">"Feature A"</span>
+  <span class="hl-attr">description</span>=<span class="hl-string">"Description A"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+  <span class="hl-attr">title</span>=<span class="hl-string">"Feature B"</span>
+  <span class="hl-attr">description</span>=<span class="hl-string">"Description B"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+  <span class="hl-attr">title</span>=<span class="hl-string">"Feature C"</span>
+  <span class="hl-attr">description</span>=<span class="hl-string">"Description C"</span> <span class="hl-tag">/&gt;</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creating a Component -->
+      <div class="section" id="creating">
+        <h2>Creating a Component</h2>
+        <p>Components are <code>.orb</code> files in the <code>components/</code> folder. The content is just HTML with <code>{{ prop }}</code> placeholders.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/card.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">description</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <p><code>{{ title }}</code> and <code>{{ description }}</code> are <strong>props</strong> — they'll be filled in when the component is used.</p>
+
+        <h3>More examples</h3>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/hero.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;section</span> <span class="hl-attr">class</span>=<span class="hl-string">"hero"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">heading</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">subheading</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+  <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">link</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-attr">class</span>=<span class="hl-string">"btn"</span><span class="hl-tag">&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">buttonText</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/a&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/badge.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-string">"badge"</span> <span class="hl-attr">style</span>=<span class="hl-string">"background: <span class="hl-bracket">{{</span> <span class="hl-var">color</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-bracket">{{</span> <span class="hl-var">text</span> <span class="hl-bracket">}}</span>
+<span class="hl-tag">&lt;/span&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Using Components -->
+      <div class="section" id="using">
+        <h2>Using Components</h2>
+        <p>Reference a component with the <code>&lt;use component="name" /&gt;</code> tag. It must be <strong>self-closing</strong> (<code>/&gt;</code>).</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">pages/index.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;layout</span> <span class="hl-attr">src</span>=<span class="hl-string">"main.layout"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;content&gt;</span>
+
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"hero"</span>
+      <span class="hl-attr">heading</span>=<span class="hl-string">"Welcome!"</span>
+      <span class="hl-attr">subheading</span>=<span class="hl-string">"Build amazing static sites"</span>
+      <span class="hl-attr">link</span>=<span class="hl-string">"/features"</span>
+      <span class="hl-attr">buttonText</span>=<span class="hl-string">"Learn More"</span> <span class="hl-tag">/&gt;</span>
+
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+      <span class="hl-attr">title</span>=<span class="hl-string">"Fast"</span>
+      <span class="hl-attr">description</span>=<span class="hl-string">"Zero runtime JS"</span> <span class="hl-tag">/&gt;</span>
+
+    <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span>
+      <span class="hl-attr">title</span>=<span class="hl-string">"Simple"</span>
+      <span class="hl-attr">description</span>=<span class="hl-string">"Just HTML"</span> <span class="hl-tag">/&gt;</span>
+
+  <span class="hl-tag">&lt;/content&gt;</span>
+<span class="hl-tag">&lt;/layout&gt;</span></code></pre>
+        </div>
+
+        <div class="info-box warn">
+          <span class="icon">⚠️</span>
+          <p><strong>Important:</strong> The component tag MUST be self-closing with <code>/&gt;</code>. Writing <code>&lt;use component="card"&gt;&lt;/use&gt;</code> will <strong>not</strong> work.</p>
+        </div>
+
+        <h3>Multi-line attributes</h3>
+        <p>When a component has many props, spread them across multiple lines for readability:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Multi-line Props</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"hero"</span>
+  <span class="hl-attr">heading</span>=<span class="hl-string">"Build the Future"</span>
+  <span class="hl-attr">subheading</span>=<span class="hl-string">"A modern static site builder"</span>
+  <span class="hl-attr">link</span>=<span class="hl-string">"/get-started"</span>
+  <span class="hl-attr">buttonText</span>=<span class="hl-string">"Start Now"</span>
+<span class="hl-tag">/&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Props -->
+      <div class="section" id="props">
+        <h2>Props — Passing Data</h2>
+        <p>Props are attributes on the <code>&lt;use&gt;</code> tag that get injected into the component's <code>{{ }}</code> placeholders.</p>
+
+        <div class="code-compare">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Component Definition</span>
+              <span class="code-lang">components/alert.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"alert alert-<span class="hl-bracket">{{</span> <span class="hl-var">type</span> <span class="hl-bracket">}}</span>"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;strong&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/strong&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">message</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-label">Usage with Props</span>
+              <span class="code-lang">.orb</span>
+            </div>
+            <pre><code><span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"alert"</span>
+  <span class="hl-attr">type</span>=<span class="hl-string">"success"</span>
+  <span class="hl-attr">title</span>=<span class="hl-string">"Saved!"</span>
+  <span class="hl-attr">message</span>=<span class="hl-string">"Changes saved."</span>
+<span class="hl-tag">/&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <p><strong>Result:</strong></p>
+        <div class="result-preview">
+          <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 0.75rem 1rem; border-radius: 4px;">
+            <strong>Saved!</strong>
+            <p style="margin: 0.25rem 0 0;">Changes saved.</p>
+          </div>
+        </div>
+
+        <h3>Props can contain variables</h3>
+        <p>Props can reference page-level data variables using <code>{{ }}</code> syntax:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Dynamic Props</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">data</span><span class="hl-tag">&gt;</span>
+({
+  <span class="hl-attr">siteName</span>: <span class="hl-string">"My Cool Site"</span>
+})
+<span class="hl-tag">&lt;/script&gt;</span>
+
+<span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"header"</span>
+  <span class="hl-attr">title</span>=<span class="hl-string">"<span class="hl-bracket">{{</span> <span class="hl-var">siteName</span> <span class="hl-bracket">}}</span>"</span> <span class="hl-tag">/&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Nesting -->
+      <div class="section" id="nesting">
+        <h2>Nested Components</h2>
+        <p>Components can use other components! OrbLayout resolves them recursively.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/header.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;header&gt;</span>
+  <span class="hl-tag">&lt;h1&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h1&gt;</span>
+  <span class="hl-comment">&lt;!-- Using badge INSIDE header --&gt;</span>
+  <span class="hl-tag">&lt;use</span> <span class="hl-attr">component</span>=<span class="hl-string">"badge"</span> <span class="hl-attr">text</span>=<span class="hl-string">"v1.2"</span> <span class="hl-attr">color</span>=<span class="hl-string">"#6c5ce7"</span> <span class="hl-tag">/&gt;</span>
+<span class="hl-tag">&lt;/header&gt;</span></code></pre>
+        </div>
+
+        <p>When the page is compiled, OrbLayout first resolves the <code>header</code> component, then finds the <code>badge</code> inside it and resolves that too. This works to any nesting depth.</p>
+
+        <div class="info-box tip">
+          <span class="icon">💡</span>
+          <p><strong>Circular references are detected.</strong> If component A uses component B, and B uses A, OrbLayout will warn you to prevent infinite loops.</p>
+        </div>
+      </div>
+
+      <!-- Component Styles -->
+      <div class="section" id="styles">
+        <h2>Component Styles</h2>
+        <p>Components can include <code>&lt;style&gt;</code> blocks. The CSS gets extracted and injected into the page's <code>&lt;head&gt;</code>.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">components/card.orb</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;style&gt;</span>
+<span class="hl-attr">.card</span> {
+  <span class="hl-attr">background</span>: <span class="hl-string">#fff</span>;
+  <span class="hl-attr">border-radius</span>: <span class="hl-string">12px</span>;
+  <span class="hl-attr">padding</span>: <span class="hl-string">1.5rem</span>;
+  <span class="hl-attr">box-shadow</span>: <span class="hl-string">0 2px 8px rgba(0,0,0,0.1)</span>;
+  <span class="hl-attr">transition</span>: <span class="hl-string">transform 0.2s</span>;
+}
+<span class="hl-attr">.card:hover</span> {
+  <span class="hl-attr">transform</span>: <span class="hl-string">translateY(-4px)</span>;
+}
+<span class="hl-tag">&lt;/style&gt;</span>
+
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-string">"card"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;h3&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">title</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/h3&gt;</span>
+  <span class="hl-tag">&lt;p&gt;</span><span class="hl-bracket">{{</span> <span class="hl-var">description</span> <span class="hl-bracket">}}</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <p>If you use this card 10 times on a page, the <code>&lt;style&gt;</code> block is only included <strong>once</strong> — OrbLayout deduplicates styles automatically.</p>
+      </div>
+
+      <!-- Imports -->
+      <div class="section" id="imports">
+        <h2>Imports & Aliases</h2>
+        <p>Import components with custom names using the <code>&lt;import&gt;</code> tag:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-label">Using Imports</span>
+            <span class="code-lang">.orb</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;import</span> <span class="hl-attr">component</span>=<span class="hl-string">"card"</span> <span class="hl-attr">as</span>=<span class="hl-string">"Card"</span> <span class="hl-tag">/&gt;</span>
+<span class="hl-tag">&lt;import</span> <span class="hl-attr">component</span>=<span class="hl-string">"badge"</span> <span class="hl-attr">as</span>=<span class="hl-string">"Badge"</span> <span class="hl-tag">/&gt;</span>
+
+<span class="hl-comment">&lt;!-- Now use the alias --&gt;</span>
+<span class="hl-tag">&lt;Card</span> <span class="hl-attr">title</span>=<span class="hl-string">"Hello"</span> <span class="hl-attr">description</span>=<span class="hl-string">"World"</span> <span class="hl-tag">/&gt;</span>
+<span class="hl-tag">&lt;Badge</span> <span class="hl-attr">text</span>=<span class="hl-string">"New"</span> <span class="hl-attr">color</span>=<span class="hl-string">"#6c5ce7"</span> <span class="hl-tag">/&gt;</span></code></pre>
+        </div>
+
+        <p>This gives you a React/Vue-like syntax where components start with a capital letter. Both <code>&lt;use component="card" /&gt;</code> and <code>&lt;Card /&gt;</code> produce the same output.</p>
+      </div>
+
+      <!-- Best Practices -->
+      <div class="section" id="best-practices">
+        <h2>Best Practices</h2>
+        <ul>
+          <li><strong>One responsibility per component.</strong> A card is a card, not a card-with-nav-and-footer.</li>
+          <li><strong>Name props clearly.</strong> Use <code>title</code>, <code>description</code>, <code>imageUrl</code> — not <code>t</code>, <code>d</code>, <code>img</code>.</li>
+          <li><strong>Compose from small pieces.</strong> Build <code>badge.orb</code>, <code>avatar.orb</code>, <code>card.orb</code> — then combine them in pages.</li>
+          <li><strong>Use styles in components.</strong> Keep CSS next to the HTML it styles.</li>
+          <li><strong>Keep components in layouts too.</strong> Headers and footers work great as components inside layouts.</li>
+        </ul>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint" id="checkpoint">
+        <h4>✅ Lesson 3 Checkpoint</h4>
+        <p style="color: var(--text-dim); margin-bottom: 0.75rem;">You should now be able to:</p>
+        <ol>
+          <li>Create a component file in <code>components/</code></li>
+          <li>Use it with <code>&lt;use component="name" /&gt;</code></li>
+          <li>Pass data via props: <code>title="Hello"</code></li>
+          <li>Nest components inside other components</li>
+          <li>Add <code>&lt;style&gt;</code> blocks to components</li>
+          <li>Import with aliases: <code>&lt;import component="card" as="Card" /&gt;</code></li>
+        </ol>
+      </div>
+
+      <div class="lesson-nav">
+        <a href="02-layouts.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Layouts & Page Structure</span>
+        </a>
+        <a href="04-data-variables.html" class="next">
+          <span class="nav-label">Next Lesson →</span>
+          <span class="nav-title">Data & Variables</span>
+        </a>
+      </div>
+
+    </div>
+    <footer class="page-footer">
+      <p>◉ OrbLayout Learning Center &mdash; <a href="https://github.com/rukkit-official/orblayout" target="_blank">GitHub</a> · <a href="https://www.npmjs.com/package/orblayout" target="_blank">npm</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
